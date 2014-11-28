@@ -1,227 +1,313 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+'''
+Class that handles the main view definition for the main grc window
+'''
 class MainView(QtWidgets.QMainWindow):
-    '''
-    Class that handles the main view definition for the main grc window
-    '''
 
+    '''
+    Initialize the main window and call wrappers to initialize subviews
+    '''
     def __init__(self):
-        ''' 
-        Initialize the main window and call wrappers to initialize subviews
-        '''
-        QtWidgets.QMainWindow.__init__(self)
+        super().__init__()
 
-        self.setObjectName("main")
-        self.resize(1024, 860)
+        # Internal dictionaries for actions and menus
+        self._actions = {}
+        self._menus = {}
+        self._toolbars = {}
 
-        ### TODO: Not sure about document mode
-        self.setDocumentMode(True)
-
+        # Main window properties
+        self.setWindowTitle('GNU Radio Companion')
         self.setDockOptions(QtWidgets.QMainWindow.AllowNestedDocks | \
             QtWidgets.QMainWindow.AllowTabbedDocks | \
             QtWidgets.QMainWindow.AnimatedDocks)
 
+        screen = QtWidgets.QDesktopWidget().availableGeometry()
+        self.resize(screen.width() * 0.40, screen.height())
+
+        ### TODO: Not sure about document mode
+        #self.setDocumentMode(True)
 
         ### TODO: Also need to pull from the saved preferences as what to show and where
 
         # Generate the rest of the window
-        self.init_actions()
-        self.init_menus()
-        self.init_toolbars()
-        self.init_statusbars()
-        self.init_other()
+        self.createActions()
+        self.createMenus()
+        self.createToolbars()
+        self.createStatusBar()
+        #self.init_other()
 
-        self.retranslateUi()
-        self.actionQuit.triggered.connect(self.close)
-        #self.actionReport.triggered.connect(self.reportDock.show)
-        QtCore.QMetaObject.connectSlotsByName(self)
+        #self.translateUI(language)
 
-    ### TODO: Move to resources folder as list
-    def init_actions(self):
-        self.actionNew = QtWidgets.QAction(self)
-        icon = QtGui.QIcon.fromTheme("document-new")
-        self.actionNew.setIcon(icon)
-        self.actionNew.setObjectName("actionNew")
-        self.actionOpen = QtWidgets.QAction(self)
-        icon = QtGui.QIcon.fromTheme("document-open")
-        self.actionOpen.setIcon(icon)
-        self.actionOpen.setObjectName("actionOpen")
-        self.actionSave = QtWidgets.QAction(self)
-        icon = QtGui.QIcon.fromTheme("document-save")
-        self.actionSave.setIcon(icon)
-        self.actionSave.setObjectName("actionSave")
-        self.actionSave_As = QtWidgets.QAction(self)
-        icon = QtGui.QIcon.fromTheme("document-save-as")
-        self.actionSave_As.setIcon(icon)
-        self.actionSave_As.setObjectName("actionSave_As")
-        self.actionClose = QtWidgets.QAction(self)
-        icon = QtGui.QIcon.fromTheme("document-close")
-        self.actionClose.setIcon(icon)
-        self.actionClose.setObjectName("actionClose")
-        self.actionQuit = QtWidgets.QAction(self)
-        icon = QtGui.QIcon.fromTheme("application-exit")
-        self.actionQuit.setIcon(icon)
-        self.actionQuit.setObjectName("actionQuit")
-        self.actionUndo = QtWidgets.QAction(self)
-        icon = QtGui.QIcon.fromTheme("edit-undo")
-        self.actionUndo.setIcon(icon)
-        self.actionUndo.setObjectName("actionUndo")
-        self.actionRedo = QtWidgets.QAction(self)
-        icon = QtGui.QIcon.fromTheme("edit-redo")
-        self.actionRedo.setIcon(icon)
-        self.actionRedo.setObjectName("actionRedo")
-        self.actionCut = QtWidgets.QAction(self)
-        icon = QtGui.QIcon.fromTheme("edit-cut")
-        self.actionCut.setIcon(icon)
-        self.actionCut.setObjectName("actionCut")
-        self.actionCopy = QtWidgets.QAction(self)
-        icon = QtGui.QIcon.fromTheme("edit-copy")
-        self.actionCopy.setIcon(icon)
-        self.actionCopy.setObjectName("actionCopy")
-        self.actionPaste = QtWidgets.QAction(self)
-        icon = QtGui.QIcon.fromTheme("edit-paste")
-        self.actionPaste.setIcon(icon)
-        self.actionPaste.setObjectName("actionPaste")
-        self.actionDelete = QtWidgets.QAction(self)
-        icon = QtGui.QIcon.fromTheme("edit-delete")
-        self.actionDelete.setIcon(icon)
-        self.actionDelete.setObjectName("actionDelete")
-        self.actionGenerate = QtWidgets.QAction(self)
-        self.actionGenerate.setObjectName("actionGenerate")
-        self.actionExecute = QtWidgets.QAction(self)
-        self.actionExecute.setObjectName("actionExecute")
-        self.actionKill = QtWidgets.QAction(self)
-        self.actionKill.setObjectName("actionKill")
-        self.actionHelp = QtWidgets.QAction(self)
-        self.actionHelp.setObjectName("actionHelp")
-        self.actionTypes = QtWidgets.QAction(self)
-        self.actionTypes.setObjectName("actionTypes")
-        self.actionAbout = QtWidgets.QAction(self)
-        self.actionAbout.setObjectName("actionAbout")
-        self.actionLibrary = QtWidgets.QAction(self)
-        self.actionLibrary.setObjectName("actionLibrary")
-        self.actionReport = QtWidgets.QAction(self)
-        self.actionReport.setObjectName("actionReport")
-        self.actionRotateLeft = QtWidgets.QAction(self)
-        self.actionRotateLeft.setObjectName("actionRotateLeft")
-        self.actionRotateRight = QtWidgets.QAction(self)
-        self.actionRotateRight.setObjectName("actionRotateRight")
-        self.actionEnable = QtWidgets.QAction(self)
-        self.actionEnable.setObjectName("actionEnable")
-        self.actionDisable = QtWidgets.QAction(self)
-        self.actionDisable.setObjectName("actionDisable")
-        self.actionProperties = QtWidgets.QAction(self)
-        self.actionProperties.setObjectName("actionProperties")
-        self.actionFileToolbar = QtWidgets.QAction(self)
-        self.actionFileToolbar.setObjectName("actionFileToolbar")
-        self.actionEditToolbar = QtWidgets.QAction(self)
-        self.actionEditToolbar.setObjectName("actionEditToolbar")
-        self.actionRunToolbar = QtWidgets.QAction(self)
-        self.actionRunToolbar.setObjectName("actionRunToolbar")
+        #self.retranslateUi()
+        #actions['Quit.triggered.connect(self.close)
+        #actions['Report.triggered.connect(self.reportDock.show)
+        #QtCore.QMetaObject.connectSlotsByName(self)
 
-    def init_menus(self):
-        '''
-        Define the main menubar for the application.
-        '''
-        menubar = QtWidgets.QMenuBar(self)
-        menubar.setObjectName("menu")
 
-        menuFile = QtWidgets.QMenu(menubar)
-        menuFile.setObjectName("menu::file")
+    # Any action for the window is defined here. Controller must
+    # use getActions and setup signals and slots to its own handlers
+    # Need to have translation capability here
+    def createActions(self):
+        icons = QtGui.QIcon.fromTheme
+        keys = QtGui.QKeySequence
 
-        menuEdit = QtWidgets.QMenu(menubar)
-        menuEdit.setObjectName("menu::edit")
+        actions = self._actions
+        ### File Actions ###
+        actions['new'] = QtWidgets.QAction(icons("document-new"),
+                                "&New", self,
+                                shortcut = keys.New,
+                                statusTip = "Create a new flow graph")
 
-        menuView = QtWidgets.QMenu(menubar)
-        menuView.setObjectName("menu::view")
+        actions['open'] = QtWidgets.QAction(icons("document-open"),
+                                "&Open...", self,
+                                shortcut = keys.Open,
+                                statusTip = "Open an existing flow graph")
 
-        menuBuild = QtWidgets.QMenu(menubar)
-        menuBuild.setObjectName("menu::build")
+        actions['close'] = QtWidgets.QAction(icons("window-close"),
+                                "Close", self,
+                                shortcut = keys.Close,
+                                statusTip = "Close the current flow graph")
 
-        menuHelp = QtWidgets.QMenu(menubar)
-        menuHelp.setObjectName("menu::help")
+        actions['close_all'] = QtWidgets.QAction(icons("window-close"),
+                                "Close All", self,
+                                #shortcut = QtGui.QKeySequence.Close,
+                                statusTip = "Close all flow graphs")
 
-        
-        menuFile.addAction(self.actionNew)
-        menuFile.addAction(self.actionOpen)
-        menuFile.addSeparator()
-        menuFile.addAction(self.actionSave)
-        menuFile.addAction(self.actionSave_As)
-        menuFile.addSeparator()
-        menuFile.addAction(self.actionClose)
-        menuFile.addAction(self.actionQuit)
-        self.menuFile = menuFile
+        actions['save'] = QtWidgets.QAction(icons("document-save"),
+                                "&Save", self,
+                                shortcut = keys.Save,
+                                statusTip = "Save the current flow graph")
 
-        menuEdit.addAction(self.actionUndo)
-        menuEdit.addAction(self.actionRedo)
-        menuEdit.addSeparator()
-        menuEdit.addAction(self.actionCut)
-        menuEdit.addAction(self.actionCopy)
-        menuEdit.addAction(self.actionPaste)
-        menuEdit.addAction(self.actionDelete)
-        menuEdit.addSeparator()
-        menuEdit.addAction(self.actionRotateLeft)
-        menuEdit.addAction(self.actionRotateRight)
-        menuEdit.addAction(self.actionEnable)
-        menuEdit.addAction(self.actionDisable)
-        menuEdit.addSeparator()
-        menuEdit.addAction(self.actionProperties)
-        self.menuEdit = menuEdit
+        actions['save_as'] = QtWidgets.QAction(icons("document-save-as"),
+                                "Save &As...", self,
+                                shortcut = keys.SaveAs,
+                                statusTip = "Save the flow graph under a new name")
 
-        menuView.addAction(self.actionLibrary)
-        menuView.addAction(self.actionReport)
-        self.menuView = menuView
+        actions['print'] = QtWidgets.QAction(icons('document-print'),
+                                "&Print...", self,
+                                shortcut = keys.Print,
+                                statusTip = "Print the current flow graph")
 
-        menuBuild.addAction(self.actionGenerate)
-        menuBuild.addAction(self.actionExecute)
-        menuBuild.addAction(self.actionKill)
-        self.menuBuild = menuBuild
+        actions['screen_capture'] = QtWidgets.QAction(icons('camera-photo'),
+                                "Screen Capture", self,
+                                #shortcut = Qt,
+                                statusTip = "Create a screen capture of the current flow graph")
 
-        menuHelp.addAction(self.actionHelp)
-        menuHelp.addAction(self.actionTypes)
-        menuHelp.addSeparator()
-        menuHelp.addAction(self.actionAbout)
-        self.menuHelp = menuHelp
+        actions['exit'] = QtWidgets.QAction(icons("application-exit"),
+                                "E&xit", self,
+                                shortcut = keys.Quit,
+                                statusTip = "Exit the application")
 
-        menubar.addAction(self.menuFile.menuAction())
-        menubar.addAction(self.menuEdit.menuAction())
-        menubar.addAction(self.menuView.menuAction())
-        menubar.addAction(self.menuBuild.menuAction())
-        menubar.addAction(self.menuHelp.menuAction())
+        ### Edit Actions ###
+        actions['undo'] = QtWidgets.QAction(icons('edit-undo'),
+                                "Undo", self,
+                                shortcut = keys.Undo,
+                                statusTip = "Undo last change")
 
-        # Set the main window's menu bar
-        self.menubar = menubar
-        self.setMenuBar(menubar)
+        actions['redo'] = QtWidgets.QAction(icons('edit-redo'),
+                                "Redo", self,
+                                shortcut = keys.Redo,
+                                statusTip = "Redo last change")
 
-    def init_toolbars(self):
-        self.fileToolbar = QtWidgets.QToolBar(self)
-        self.fileToolbar.setObjectName("fileToolbar")
-        self.addToolBar(QtCore.Qt.TopToolBarArea, self.fileToolbar)
+        actions['cut'] = QtWidgets.QAction(icons('edit-cut'),
+                                "Cu&t", self,
+                                shortcut = keys.Cut,
+                                statusTip = "Cut the current selection's contents to the clipboard")
 
-        self.editToolbar = QtWidgets.QToolBar(self)
-        self.editToolbar.setObjectName("editToolbar")
-        self.addToolBar(QtCore.Qt.TopToolBarArea, self.editToolbar)
+        actions['copy'] = QtWidgets.QAction(icons('edit-copy'),
+                                "&Copy", self,
+                                shortcut = keys.Copy,
+                                statusTip = "Copy the current selection's contents to the clipboard")
 
-        self.runToolbar = QtWidgets.QToolBar(self)
-        self.runToolbar.setObjectName("runToolbar")
-        self.addToolBar(QtCore.Qt.TopToolBarArea, self.runToolbar)
+        actions['paste'] = QtWidgets.QAction(icons('edit-paste'),
+                                "&Paste", self,
+                                shortcut = keys.Paste,
+                                statusTip = "Paste the clipboard's contents into the current selection")
 
-        self.fileToolbar.addAction(self.actionNew)
-        self.fileToolbar.addAction(self.actionOpen)
-        self.fileToolbar.addAction(self.actionSave)
-        self.fileToolbar.addAction(self.actionClose)
-        self.editToolbar.addAction(self.actionCut)
-        self.editToolbar.addAction(self.actionCopy)
-        self.editToolbar.addAction(self.actionPaste)
-        self.editToolbar.addAction(self.actionDelete)
-        self.runToolbar.addAction(self.actionGenerate)
-        self.runToolbar.addAction(self.actionExecute)
-        self.runToolbar.addAction(self.actionKill)
+        actions['delete'] = QtWidgets.QAction(icons('edit-delete'),
+                                "&Delete", self,
+                                shortcut = keys.Delete,
+                                statusTip = "Delete the selected blocks")
 
-    def init_statusbars(self):
-        self.statusbar = QtWidgets.QStatusBar(self)
-        self.statusbar.setObjectName("statusbar")
-        self.setStatusBar(self.statusbar)
+        actions['rotate_ccw'] = QtWidgets.QAction(icons('object-rotate-left'),
+                                "Rotate Counterclockwise", self,
+                                shortcut = keys.MoveToPreviousChar,
+                                statusTip = "Rotate the selected block 90 degress counterclockwise")
+
+        actions['rotate_cw'] = QtWidgets.QAction(icons('object-rotate-right'),
+                                "Rotate Counterclockwise", self,
+                                shortcut = keys.MoveToNextChar,
+                                statusTip = "Rotate the selected block 90 degress clockwise")
+
+        ### View Actions ###
+        actions['errors'] = QtWidgets.QAction(icons('dialog-error'),
+                                "&Errors", self,
+                                shortcut = 'E',
+                                statusTip = "View the flowgraph errors")
+
+        actions['find'] = QtWidgets.QAction(icons('edit-find'),
+                                "&Find Block", self,
+                                shortcut = keys.Find,
+                                statusTip = "Search for a block by name (and key)")
+
+        ### Help Actions ###
+        actions['about'] = QtWidgets.QAction(icons('help-about'),
+                                "&About", self,
+                                statusTip = "Show the application's About box")
+
+        actions['generate'] = QtWidgets.QAction(icons('system-run'),
+                                "&Generate", self,
+                                shortcut = 'F5',
+                                statusTip = "Generate a python flowgraph")
+
+        actions['execute'] = QtWidgets.QAction(icons('media-playback-start'),
+                                "Execute", self,
+                                shortcut = 'F6',
+                                statusTip = "Execute a python flowgraph")
+
+        actions['kill'] =   QtWidgets.QAction(icons('process-stop'),
+                                "Kill", self,
+                                shortcut = 'F7',
+                                statusTip = "Kill current flowgraph")
+
+        actions['help'] = QtWidgets.QAction(icons('help-browser'),
+                                "Help", self,
+                                shortcut = keys.HelpContents,
+                                statusTip = "Show help")
+
+        actions['types'] = QtWidgets.QAction("Types", self)
+
+        actions['library'] = QtWidgets.QAction("Library", self,
+                                shortcut = "Ctrl+L",
+                                statusTip = "Show the block library")
+
+        actions['report'] = QtWidgets.QAction("Reports", self)
+        actions['enable'] = QtWidgets.QAction("Enable", self)
+        actions['disable'] = QtWidgets.QAction("Disable", self)
+        actions['properties'] = QtWidgets.QAction(icons('document-properties'),
+                                "Properties", self,
+                                #shortcut = QtGui,
+                                statusTip = "Show properties for flowgraph")
+
+        actions['preferences'] = QtWidgets.QAction(icons('preferences-system'),
+                                "Preferences", self,
+                                #shortcut,
+                                statusTip = "Show GRC preferences")
+
+        # Disable some actions, by default
+        actions['save'].setEnabled(False)
+        actions['undo'].setEnabled(False)
+        actions['redo'].setEnabled(False)
+        actions['cut'].setEnabled(False)
+        actions['copy'].setEnabled(False)
+        actions['paste'].setEnabled(False)
+        actions['delete'].setEnabled(False)
+        actions['rotate_ccw'].setEnabled(False)
+        actions['rotate_cw'].setEnabled(False)
+        actions['errors'].setEnabled(False)
+
+    def getActions(self):
+        return self._actions
+
+    # Setup the main menubar for the application
+    def createMenus(self):
+        actions = self._actions
+        menus = self._menus
+
+        # Global menu options
+        self.menuBar().setNativeMenuBar(True)
+
+        # Setup the file menu
+        file = self.menuBar().addMenu("&File")
+        file.addAction(actions['new'])
+        file.addAction(actions['open'])
+        file.addAction(actions['close'])
+        file.addAction(actions['close_all'])
+        file.addSeparator();
+        file.addAction(actions['save'])
+        file.addAction(actions['save_as'])
+        file.addSeparator();
+        file.addAction(actions['screen_capture'])
+        file.addAction(actions['print'])
+        file.addSeparator();
+        file.addAction(actions['exit'])
+        menus['file'] = file
+
+        # Setup the edit menu
+        edit = self.menuBar().addMenu("&Edit")
+        edit.addAction(actions['undo'])
+        edit.addAction(actions['redo'])
+        edit.addSeparator()
+        edit.addAction(actions['cut'])
+        edit.addAction(actions['copy'])
+        edit.addAction(actions['paste'])
+        edit.addAction(actions['delete'])
+        edit.addSeparator()
+        edit.addAction(actions['rotate_ccw'])
+        edit.addAction(actions['rotate_cw'])
+        edit.addSeparator()
+        edit.addAction(actions['enable'])
+        edit.addAction(actions['disable'])
+        edit.addAction(actions['properties'])
+        menus['edit'] = edit
+
+        # Setup the view menu
+        view = self.menuBar().addMenu("&View")
+        view.addAction(actions['errors'])
+        view.addAction(actions['find'])
+        view.addSeparator()
+        view.addAction(actions['library'])
+        view.addAction(actions['report'])
+        menus['view'] = view
+
+        # Setup the build menu
+        build = self.menuBar().addMenu("&Build")
+        build.addAction(actions['generate'])
+        build.addAction(actions['execute'])
+        build.addAction(actions['kill'])
+        menus['build'] = build
+
+        # Setup the help menu
+        help = self.menuBar().addMenu("&Help")
+        help.addAction(actions['help'])
+        help.addSeparator()
+        help.addAction(actions['about'])
+        menus['help'] = help
+
+    def createToolbars(self):
+        toolbars = self._toolbars
+        actions = self._actions
+
+        # Main toolbar
+        file = self.addToolBar("file")
+        file.addAction(actions['new'])
+        file.addAction(actions['open'])
+        file.addAction(actions['save'])
+        file.addAction(actions['close'])
+        file.addAction(actions['print'])
+        toolbars['file'] = file
+
+        # Edit toolbar
+        edit = self.addToolBar("edit")
+        edit.addAction(actions['cut'])
+        edit.addAction(actions['copy'])
+        edit.addAction(actions['paste'])
+        edit.addAction(actions['delete'])
+        edit.addSeparator()
+        edit.addAction(actions['rotate_ccw'])
+        edit.addAction(actions['rotate_cw'])
+        toolbars['edit'] = edit
+
+        # Run Toolbar
+        run = self.addToolBar("run")
+        run.addAction(actions['generate'])
+        run.addAction(actions['execute'])
+        run.addAction(actions['kill'])
+        toolbars['run'] = run
+
+    def createStatusBar(self):
+        self.statusBar().showMessage("Ready")
 
     def init_other(self):
 
@@ -238,8 +324,8 @@ class MainView(QtWidgets.QMainWindow):
 
         #tab_1 = QtWidgets.QWidget()
         #tab_1.setObjectName("tab_3")
-        
-        #tab_2 = QtWidgets.QWidget()
+
+        #tab_2'= QtWidgets.QWidget()
         #tab_2.setObjectName("tab_4")
 
         #tab_layout = QtWidgets.QHBoxLayout()
@@ -251,12 +337,14 @@ class MainView(QtWidgets.QMainWindow):
         #tabs.addTab(tab_2, "")
 
         #layout_5 = QtWidgets.QHBoxLayout()
-        #layout_5.setObjectName("horizontalLayout_5" 
-  
+        #layout_5.setObjectName("horizontalLayout_5"
+
         #self.horizontalLayout_5.addWidget(self.editorTabs)
         #self.horizontalLayout.addLayout(self.horizontalLayout_5)
-  
-        self.setCentralWidget(centralwidget)
+
+
+    def open(self, flowgraph):
+        self.setCentralWidget(flowgraph)
 
     ### TODO: Move action list and translations out of view
     def retranslateUi(self):
@@ -274,49 +362,5 @@ class MainView(QtWidgets.QMainWindow):
         self.editToolbar.setWindowTitle(_translate("self", "Edit Toolbar"))
         self.runToolbar.setWindowTitle(_translate("self", "Run Toolbar"))
         #self.dockWidget.setWindowTitle(_translate("self", "Project"))
-        self.actionNew.setText(_translate("self", "New"))
-        self.actionNew.setToolTip(_translate("self", "New Flowgraph"))
-        self.actionNew.setShortcut(_translate("self", "Ctrl+N"))
-        self.actionOpen.setText(_translate("self", "Open"))
-        self.actionOpen.setShortcut(_translate("self", "Ctrl+O"))
-        self.actionSave.setText(_translate("self", "Save"))
-        self.actionSave.setShortcut(_translate("self", "Ctrl+S"))
-        self.actionSave_As.setText(_translate("self", "Save As"))
-        self.actionSave_As.setShortcut(_translate("self", "Ctrl+Shift+S"))
-        self.actionClose.setText(_translate("self", "Close"))
-        self.actionClose.setShortcut(_translate("self", "Ctrl+W"))
-        self.actionQuit.setText(_translate("self", "Quit"))
-        self.actionUndo.setText(_translate("self", "Undo"))
-        self.actionUndo.setShortcut(_translate("self", "Ctrl+Z"))
-        self.actionRedo.setText(_translate("self", "Redo"))
-        self.actionRedo.setShortcut(_translate("self", "Ctrl+Y"))
-        self.actionCut.setText(_translate("self", "Cut"))
-        self.actionCut.setShortcut(_translate("self", "Ctrl+X"))
-        self.actionCopy.setText(_translate("self", "Copy"))
-        self.actionCopy.setShortcut(_translate("self", "Ctrl+C"))
-        self.actionPaste.setText(_translate("self", "Paste"))
-        self.actionPaste.setShortcut(_translate("self", "Ctrl+V"))
-        self.actionDelete.setText(_translate("self", "Delete"))
-        self.actionDelete.setShortcut(_translate("self", "Del"))
-        self.actionGenerate.setText(_translate("self", "Generate"))
-        self.actionGenerate.setShortcut(_translate("self", "F5"))
-        self.actionExecute.setText(_translate("self", "Execute"))
-        self.actionExecute.setShortcut(_translate("self", "F6"))
-        self.actionKill.setText(_translate("self", "Kill"))
-        self.actionKill.setShortcut(_translate("self", "F7"))
-        self.actionHelp.setText(_translate("self", "Help"))
-        self.actionHelp.setShortcut(_translate("self", "F1"))
-        self.actionTypes.setText(_translate("self", "Types"))
-        self.actionAbout.setText(_translate("self", "About"))
-        self.actionLibrary.setText(_translate("self", "Library"))
-        self.actionLibrary.setShortcut(_translate("self", "Ctrl+L"))
-        self.actionReport.setText(_translate("self", "Report"))
-        self.actionRotateLeft.setText(_translate("self", "Rotate Left"))
-        self.actionRotateRight.setText(_translate("self", "Rotate Right"))
-        self.actionEnable.setText(_translate("self", "Enable"))
-        self.actionDisable.setText(_translate("self", "Disable"))
-        self.actionProperties.setText(_translate("self", "Properties"))
-        self.actionFileToolbar.setText(_translate("self", "File"))
-        self.actionEditToolbar.setText(_translate("self", "Edit"))
-        self.actionRunToolbar.setText(_translate("self", "Run"))
-
+        '''actions['New.setText(_translate("self", "New"))
+        actions['New.setToolTip(_translate("self", "New Flowgraph"))'''
