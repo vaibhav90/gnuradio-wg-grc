@@ -18,8 +18,8 @@ class MainController(object):
         self._view_actions = self._window.getActions()
         helpers.Qt.connectSlots(self, self._view_actions)
 
-        #self.flowgraph = views.FlowGraph(self._window, 'grcqt/companion/views/data/rx_logo.grc')
-        #self._window.open(self.flowgraph)
+        self.flowgraph = views.FlowGraph(self._window, 'grcqt/companion/views/data/rx_logo.grc')
+        self._window.open(self.flowgraph)
 
         # Also load and initialize child controllers
         #report_view = views.ReportsView()

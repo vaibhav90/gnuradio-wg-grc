@@ -7,7 +7,7 @@ from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.QtCore import Qt
 
 # custom modules
-from block import Block
+from . block import Block
 
 
 DEFAULT_MAX_X = 1280
@@ -18,7 +18,7 @@ class FlowGraph(QtWidgets.QGraphicsView):
         super(FlowGraph, self).__init__()
         self.setParent(parent)
         self.setAlignment(Qt.AlignLeft|Qt.AlignTop)
-        
+
         self.scene = QtWidgets.QGraphicsScene()
 
         self.setSceneRect(0,0,DEFAULT_MAX_X, DEFAULT_MAX_Y)
@@ -26,25 +26,25 @@ class FlowGraph(QtWidgets.QGraphicsView):
             self.readFile(filename)
         else:
             self.initEmpty()
-            
+
         self.setScene(self.scene);
         self.setBackgroundBrush(QtGui.QBrush(Qt.white))
         self.setInteractive(True)
         self.setDragMode(QtWidgets.QGraphicsView.RubberBandDrag)
-        
+
         self.isPanning    = False
         self.mousePressed = False
-        
+
     def readFile(self, filename):
         tree = ET.parse(filename)
         root = tree.getroot()
         blocks = {}
-        
+
         for xml_block in tree.findall('block'):
             attrib = {}
             params = []
             block_key = xml_block.find('key').text
-            
+
             for param in xml_block.findall('param'):
                 key = param.find('key').text
                 value = param.find('value').text
@@ -52,7 +52,7 @@ class FlowGraph(QtWidgets.QGraphicsView):
                     attrib[key] = literal_eval(value)
                 else:
                     params.append((key, value))
-                    
+
             block = Block(block_key, attrib, params)
             x, y = block._coordinate
             proxy = self.scene.addWidget(block)
@@ -60,11 +60,11 @@ class FlowGraph(QtWidgets.QGraphicsView):
         bounds = self.scene.itemsBoundingRect()
         self.setSceneRect(bounds)
         self.fitInView(bounds)
-        
+
     def initEmpty(self):
         self.setSceneRect(0,0,DEFAULT_MAX_X, DEFAULT_MAX_Y)
 
-    
+
 
     def mousePressEvent(self,  event):
         if event.button() == Qt.LeftButton:
@@ -75,7 +75,7 @@ class FlowGraph(QtWidgets.QGraphicsView):
                 event.accept()
             else:
                 super(FlowGraph, self).mousePressEvent(event)
-    
+
     def mouseMoveEvent(self, event):
         if self.mousePressed and self.isPanning:
             newPos = event.pos()
@@ -89,7 +89,7 @@ class FlowGraph(QtWidgets.QGraphicsView):
             if  itemUnderMouse is not None:
                 #~ print itemUnderMouse
                 pass
-                
+
             super(FlowGraph, self).mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event):
@@ -102,7 +102,7 @@ class FlowGraph(QtWidgets.QGraphicsView):
             self.mousePressed = False
         super(FlowGraph, self).mouseReleaseEvent(event)
 
-    def mouseDoubleClickEvent(self, event): 
+    def mouseDoubleClickEvent(self, event):
         pass
 
     def keyPressEvent(self, event):
@@ -126,6 +126,3 @@ class FlowGraph(QtWidgets.QGraphicsView):
         if event.angleDelta().y() < 0:
             factor = 1.0 / factor
         self.scale(factor, factor)
-
-        
-        
