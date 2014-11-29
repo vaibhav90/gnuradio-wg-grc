@@ -3,10 +3,18 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import sys, os
+import logging, logging.handlers
 sys.path.append(os.path.dirname(__file__))
 
 #from grcqt.companion import main
 from companion import main
+
+LEVELS = {'--debug': logging.DEBUG,
+          '--info': logging.INFO,
+          '--warning': logging.WARNING,
+          '--error': logging.ERROR,
+          '--critical': logging.CRITICAL}
+
 
 """
 Companion should handle the main launch of everything.
@@ -15,6 +23,34 @@ Initialize the platform and model, then launch the GUI.
 
 if __name__ == "__main__":
 
+    # Find out the level of the console logging.
+    # Defaults to WARNING.
+    # Main logger should still catch everything so it can
+    #  be opened in a graphical debug window
+    if len(sys.argv) > 1:
+        level_name = sys.argv[1]
+        level = LEVELS.get(level_name, logging.WARNING)
+    else:
+        level = logging.WARNING
+
+    # Initialize loggers and handlers
+    logger = logging.getLogger('grc')
+    logger.setLevel(logging.DEBUG)      # Catch everything
+
+    # Setup the console logging with the given level
+    console = logging.StreamHandler()
+    console.setLevel(level)
+
+    # Add console formatting
+    #format ='%(asctime)s %(message)s'
+    format = '%(asctime)s - %(name)s {%(levelname)s}\t- %(message)s'
+    #date_format = '%m/%d/%Y %I:%M:%S %p'
+    date_format = '%m/%d/%Y %I:%M'
+    formatter = logging.Formatter(format, datefmt=date_format)
+    #formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    console.setFormatter(formatter)
+    logger.addHandler(console)
+
     # Setup the main qt application and window
     app = QtWidgets.QApplication(sys.argv)
 
@@ -22,7 +58,7 @@ if __name__ == "__main__":
     try:
         from gnuradio import gr
     except ImportError as e:
-        pass
+        logger.error('Unable to import GR framework')
 
     # Get the icon path. Will be relative to this script so define it here.
     icon_path = 'grcqt/companion/resources/logo/gnuradio_logo_icon-square-150x150-white.png'

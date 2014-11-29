@@ -1,4 +1,7 @@
+import logging
 from PyQt5 import QtCore, QtGui, QtWidgets
+
+logger = logging.getLogger("grc.views.main")
 
 '''
 Class that handles the main view definition for the main grc window
@@ -10,6 +13,7 @@ class MainView(QtWidgets.QMainWindow):
     '''
     def __init__(self):
         super().__init__()
+        logger.debug("__init__")
 
         # Internal dictionaries for actions and menus
         self._actions = {}
@@ -17,6 +21,7 @@ class MainView(QtWidgets.QMainWindow):
         self._toolbars = {}
 
         # Main window properties
+        logger.debug("Setting window properties")
         self.setWindowTitle('GNU Radio Companion')
         self.setDockOptions(QtWidgets.QMainWindow.AllowNestedDocks | \
             QtWidgets.QMainWindow.AllowTabbedDocks | \
@@ -49,6 +54,7 @@ class MainView(QtWidgets.QMainWindow):
     # use getActions and setup signals and slots to its own handlers
     # Need to have translation capability here
     def createActions(self):
+        logger.debug("Creating actions")
         icons = QtGui.QIcon.fromTheme
         keys = QtGui.QKeySequence
 
@@ -212,6 +218,7 @@ class MainView(QtWidgets.QMainWindow):
 
     # Setup the main menubar for the application
     def createMenus(self):
+        logger.debug("Creating menus")
         actions = self._actions
         menus = self._menus
 
@@ -276,6 +283,7 @@ class MainView(QtWidgets.QMainWindow):
         menus['help'] = help
 
     def createToolbars(self):
+        logger.debug("Creating toolbars")
         toolbars = self._toolbars
         actions = self._actions
 
@@ -307,10 +315,11 @@ class MainView(QtWidgets.QMainWindow):
         toolbars['run'] = run
 
     def createStatusBar(self):
+        logger.debug("Creating status bar")
         self.statusBar().showMessage("Ready")
 
     def init_other(self):
-
+        logger.debug("Creating other")
         centralwidget = QtWidgets.QWidget(self)
         centralwidget.setObjectName("main::central")
 
@@ -348,6 +357,7 @@ class MainView(QtWidgets.QMainWindow):
 
     ### TODO: Move action list and translations out of view
     def retranslateUi(self):
+        logger.debug("Translating")
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("self", "GNU Radio Companion"))
         #self.editorTabs.setTabText(self.editorTabs.indexOf(self.tab_3), _translate("self", "Tab 1"))

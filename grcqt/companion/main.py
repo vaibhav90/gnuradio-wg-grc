@@ -1,24 +1,32 @@
-#! /usr/bin/env python3
 import sys, os
-
+import logging
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+# GRC imports
 from . import views
 from . import controllers
 from . controllers import helpers
+
+# Note. Logger must have the correct naming convention to share
+# handlers
+logger = logging.getLogger("grc.main")
 
 class MainController(object):
     def __init__(self):
 
         # Load the main view class and initialize QMainWindow
+        logger.debug("__init__")
         self._window = views.MainView()
         self._platform = None
 
         # Need to setup the slots for the QtAction
+        logger.debug("Connecting signals")
         self._view_actions = self._window.getActions()
         helpers.Qt.connectSlots(self, self._view_actions)
 
+        logger.debug("Loading flowgraph model")
         self.flowgraph = views.FlowGraph(self._window, 'grcqt/companion/views/data/rx_logo.grc')
+        logger.debug("Adding flowgraph view")
         self._window.open(self.flowgraph)
 
         # Also load and initialize child controllers
@@ -57,85 +65,82 @@ class MainController(object):
         # if geometry is not None: self.restoreGeometry(geometry)
 
     def start(self):
+        logger.debug("Showing main window")
         self._window.show()
 
     def set_icon(self, path):
+        logger.debug("Setting window icon (%s)" % path )
         icon = QtGui.QIcon(path)
         self._window.setWindowIcon(icon)
 
-
-    ############################################################
-    # Report Window
-    ############################################################
-
-    def add_report_line(self, line):
-        pass
 
     ############################################################
     # Pages: create and close
     ############################################################
 
     def new_clicked(self):
-        print ('new file')
+        logger.debug ('new file')
 
     def open_clicked(self):
-        print ('open')
+        logger.debug ('open')
         filename, filtr = QtWidgets.QFileDialog.getOpenFileName(self._window,
                             self._view_actions['open'].statusTip(),
                             filter='Flow Graph Files (*.grc);;All files (*.*)')
         if filename:
+            logger.info("Opening flowgraph (%s) " % filename )
             self.flowgraph = FlowGraph(self, filename)
 
     def save_clicked(self):
-        print ('save')
+        logger.debug ('save')
 
     def save_as_clicked(self):
-        print ('save')
+        logger.debug ('save')
 
     def close_clicked(self):
-        print ('close')
+        logger.debug ('close')
 
     def close_all_clicked(self):
-        print ('close')
+        logger.debug ('close')
 
     def print_clicked(self):
-        print ('print')
+        logger.debug ('print')
 
     def screen_capture_clicked(self):
-        print ('screen capture')
+        logger.debug ('screen capture')
 
     def undo_clicked(self):
-        print ('undo')
+        logger.debug ('undo')
 
     def redo_clicked(self):
-        print ('redo')
+        logger.debug ('redo')
 
     def cut_clicked(self):
-        print ('cut')
+        logger.debug ('cut')
 
     def copy_clicked(self):
-        print ('copy')
+        logger.debug ('copy')
 
     def paste_clicked(self):
-        print ('paste')
+        logger.debug ('paste')
 
     def delete_clicked(self):
-        print ('delete')
+        logger.debug ('delete')
 
     def rotate_ccw_clicked(self):
-        print ('rotate ccw')
+        logger.debug ('rotate ccw')
 
     def rotate_cw_clicked(self):
-        print ('rotate cw')
+        logger.debug ('rotate cw')
 
     def errors_clicked(self):
-        print ('errors')
+        logger.debug ('errors')
 
     def find_clicked(self):
-        print ('find block')
+        logger.debug ('find block')
 
     def about_clicked(self):
+        logger.debug ('about')
         QtWidgets.QMessageBox.about(self._window, "GNU Radio Companion", "<b>GNU Radio Companion</b>")
 
     def notImplemented(self):
-        print("Not yet implemented")
+        logger.debug ('Not implemented')

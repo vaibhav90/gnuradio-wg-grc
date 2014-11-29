@@ -1,3 +1,6 @@
+import logging
+
+logger = logging.getLogger("grc.controllers.helpers.Qt")
 
 '''
  Handles connecting signals from given actions to handlers
@@ -11,15 +14,17 @@
   and slots can be separated into a view and controller class
 
 '''
+
 def connectSlots(self, actions):
     for key in actions:
         try:
             handler = key + "_clicked"
             actions[key].triggered.connect(getattr(self, handler))
+            logger.debug("Action <%s> connected to handler <%s>" % (key, handler))
         except:
             # Just in case someone forgot
             try:
-                print("Slot not implemented for signal %s in %s" % (key, type(self)))
+                logger.warning("Slot not implemented for signal <%s> in %s" % (key, type(self)))
                 actions[key].triggered.connect(getattr(self, 'notImplemented'))
             except:
-                print("Class cannot handle signal for action %s" % key)
+                logger.error("Class cannot handle signal for action <%s>" % key)
