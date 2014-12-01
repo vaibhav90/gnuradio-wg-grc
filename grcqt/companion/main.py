@@ -12,7 +12,7 @@ from . controllers import helpers
 logger = logging.getLogger("grc.main")
 
 class MainController(object):
-    def __init__(self):
+    def __init__(self, dir):
 
         # Load the main view class and initialize QMainWindow
         logger.debug("__init__")
@@ -25,7 +25,8 @@ class MainController(object):
         helpers.Qt.connectSlots(self, self._view_actions)
 
         logger.debug("Loading flowgraph model")
-        self.flowgraph = views.FlowGraph(self._window, 'grcqt/companion/views/data/rx_logo.grc')
+        test_flowgraph = os.path.join(dir, 'companion/views/data/rx_logo.grc')
+        self.flowgraph = views.FlowGraph(self._window, test_flowgraph)
         logger.debug("Adding flowgraph view")
         self._window.open(self.flowgraph)
 

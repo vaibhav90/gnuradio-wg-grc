@@ -11,7 +11,8 @@ from companion import main
 
 # Global constants
 APP_NAME = "grc"
-LOCALE_DIR = os.path.join(os.getcwd(), 'grcqt/companion/resources/language')
+INSTALL_DIR = os.path.abspath(os.path.dirname(__file__))
+RESOURCES_DIR = os.path.join(INSTALL_DIR, 'companion/resources')
 DEFAULT_LANGUAGE = ['en_US']
 
 LEVELS = {'--debug': logging.DEBUG,
@@ -19,6 +20,7 @@ LEVELS = {'--debug': logging.DEBUG,
           '--warning': logging.WARNING,
           '--error': logging.ERROR,
           '--critical': logging.CRITICAL}
+
 
 '''
 Script that launches the GNU Radio Companion application. This should handle
@@ -53,6 +55,12 @@ if __name__ == "__main__":
     logger.addHandler(console)
 
 
+    ### Path Information ###
+    logger.debug("APP_NAME - %s" % APP_NAME)
+    logger.debug("INSTALL_DIR - %s" % INSTALL_DIR)
+    logger.debug("RESOURCES_DIR - %s" % RESOURCES_DIR)
+
+
     ### Translation Support ###
     # Try to get the current locale. Always add English
     lc, encoding = locale.getdefaultlocale()
@@ -62,7 +70,9 @@ if __name__ == "__main__":
     logger.debug("Using locale - %s" % str(languages))
 
     # Still run even if the english translation isn't found
-    language = gettext.translation(APP_NAME, LOCALE_DIR, languages=languages, fallback=True)
+    LANGUAGE_DIR = os.path.join(RESOURCES_DIR, 'language')
+    logger.debug("LANGUAGE_DIR - %s" % LANGUAGE_DIR)
+    language = gettext.translation(APP_NAME, LANGUAGE_DIR, languages=languages, fallback=True)
     if (type(language) == gettext.NullTranslations):
         logger.error("Unable to find any translation")
         logger.error("Default English translation missing")
@@ -83,13 +93,15 @@ if __name__ == "__main__":
         logger.error('Unable to import GR framework')
 
     # Get the icon path. Will be relative to this script so define it here.
-    icon_path = 'grcqt/companion/resources/logo/gnuradio_logo_icon-square-150x150-white.png'
+    ICON = os.path.join(RESOURCES_DIR, 'logo/gnuradio_logo_icon-square-150x150-white.png')
+    logger.debug("ICON - %s" % ICON)
 
     # Initialize the GUI
-    controller = main.MainController()
-    controller.set_icon(icon_path)
+    controller = main.MainController(INSTALL_DIR) # Temporary argument
+    #controller = main.MainController()
+    controller.set_icon(ICON)
     controller.start()
 
     # Launch the qt app
     sys.exit(app.exec_())
-    #sys.exit()
+    #sys.exit(0)
