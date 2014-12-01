@@ -22,7 +22,7 @@ class MainView(QtWidgets.QMainWindow):
 
         # Main window properties
         logger.debug("Setting window properties")
-        self.setWindowTitle('GNU Radio Companion')
+        self.setWindowTitle(_('window-title'))
         self.setDockOptions(QtWidgets.QMainWindow.AllowNestedDocks | \
             QtWidgets.QMainWindow.AllowTabbedDocks | \
             QtWidgets.QMainWindow.AnimatedDocks)
@@ -61,145 +61,146 @@ class MainView(QtWidgets.QMainWindow):
         actions = self._actions
         ### File Actions ###
         actions['new'] = QtWidgets.QAction(icons("document-new"),
-                                "&New", self,
+                                _("new"), self,
                                 shortcut = keys.New,
-                                statusTip = "Create a new flow graph")
+                                statusTip = _("new-tooltip"))
 
         actions['open'] = QtWidgets.QAction(icons("document-open"),
-                                "&Open...", self,
+                                _("open"), self,
                                 shortcut = keys.Open,
-                                statusTip = "Open an existing flow graph")
+                                statusTip = _("open-tooltip"))
 
         actions['close'] = QtWidgets.QAction(icons("window-close"),
-                                "Close", self,
+                                _("close"), self,
                                 shortcut = keys.Close,
-                                statusTip = "Close the current flow graph")
+                                statusTip = _("close-tooltip"))
 
         actions['close_all'] = QtWidgets.QAction(icons("window-close"),
-                                "Close All", self,
+                                _("close_all"), self,
                                 #shortcut = QtGui.QKeySequence.Close,
-                                statusTip = "Close all flow graphs")
+                                statusTip = _("close_all-tooltip"))
 
         actions['save'] = QtWidgets.QAction(icons("document-save"),
-                                "&Save", self,
+                                _("save"), self,
                                 shortcut = keys.Save,
-                                statusTip = "Save the current flow graph")
+                                statusTip = _("save-tooltip"))
 
         actions['save_as'] = QtWidgets.QAction(icons("document-save-as"),
-                                "Save &As...", self,
+                                _("save_as"), self,
                                 shortcut = keys.SaveAs,
-                                statusTip = "Save the flow graph under a new name")
+                                statusTip = _("save_as-tooltip"))
 
         actions['print'] = QtWidgets.QAction(icons('document-print'),
-                                "&Print...", self,
+                                _("print"), self,
                                 shortcut = keys.Print,
-                                statusTip = "Print the current flow graph")
+                                statusTip = _("print-tooltip"))
 
         actions['screen_capture'] = QtWidgets.QAction(icons('camera-photo'),
-                                "Screen Capture", self,
+                                _("screen_capture"), self,
                                 #shortcut = Qt,
-                                statusTip = "Create a screen capture of the current flow graph")
+                                statusTip = _("screen_capture-tooltip"))
 
         actions['exit'] = QtWidgets.QAction(icons("application-exit"),
-                                "E&xit", self,
+                                _("exit"), self,
                                 shortcut = keys.Quit,
-                                statusTip = "Exit the application")
+                                statusTip = _("exit-tooltip"))
 
         ### Edit Actions ###
         actions['undo'] = QtWidgets.QAction(icons('edit-undo'),
-                                "Undo", self,
+                                _("undo"), self,
                                 shortcut = keys.Undo,
-                                statusTip = "Undo last change")
+                                statusTip = _("undo-tooltip"))
 
         actions['redo'] = QtWidgets.QAction(icons('edit-redo'),
-                                "Redo", self,
+                                _("redo"), self,
                                 shortcut = keys.Redo,
-                                statusTip = "Redo last change")
+                                statusTip = _("redo-tooltip"))
 
         actions['cut'] = QtWidgets.QAction(icons('edit-cut'),
-                                "Cu&t", self,
+                                _("cut"), self,
                                 shortcut = keys.Cut,
-                                statusTip = "Cut the current selection's contents to the clipboard")
+                                statusTip = _("cut-tooltip"))
 
         actions['copy'] = QtWidgets.QAction(icons('edit-copy'),
-                                "&Copy", self,
+                                _("copy"), self,
                                 shortcut = keys.Copy,
-                                statusTip = "Copy the current selection's contents to the clipboard")
+                                statusTip = _("copy-tooltip"))
 
         actions['paste'] = QtWidgets.QAction(icons('edit-paste'),
-                                "&Paste", self,
+                                _("paste"), self,
                                 shortcut = keys.Paste,
-                                statusTip = "Paste the clipboard's contents into the current selection")
+                                statusTip = _("paste-tooltip"))
 
         actions['delete'] = QtWidgets.QAction(icons('edit-delete'),
-                                "&Delete", self,
+                                _("delete"), self,
                                 shortcut = keys.Delete,
-                                statusTip = "Delete the selected blocks")
+                                statusTip = _("delete-tooltip"))
 
         actions['rotate_ccw'] = QtWidgets.QAction(icons('object-rotate-left'),
-                                "Rotate Counterclockwise", self,
+                                _("rotate_ccw"), self,
                                 shortcut = keys.MoveToPreviousChar,
-                                statusTip = "Rotate the selected block 90 degress counterclockwise")
+                                statusTip = _("rotate_ccw-tooltip"))
 
         actions['rotate_cw'] = QtWidgets.QAction(icons('object-rotate-right'),
-                                "Rotate Counterclockwise", self,
+                                _("rotate_cw"), self,
                                 shortcut = keys.MoveToNextChar,
-                                statusTip = "Rotate the selected block 90 degress clockwise")
+                                statusTip = _("rotate_cw-tooltip"))
 
         ### View Actions ###
         actions['errors'] = QtWidgets.QAction(icons('dialog-error'),
-                                "&Errors", self,
+                                _("errors"), self,
                                 shortcut = 'E',
-                                statusTip = "View the flowgraph errors")
+                                statusTip = _("errors-tooltip"))
 
         actions['find'] = QtWidgets.QAction(icons('edit-find'),
-                                "&Find Block", self,
+                                _("find"), self,
                                 shortcut = keys.Find,
-                                statusTip = "Search for a block by name (and key)")
+                                statusTip = _("find-tooltip"))
 
         ### Help Actions ###
         actions['about'] = QtWidgets.QAction(icons('help-about'),
-                                "&About", self,
-                                statusTip = "Show the application's About box")
+                                _("about"), self,
+                                statusTip = _("about-tooltip"))
 
         actions['generate'] = QtWidgets.QAction(icons('system-run'),
-                                "&Generate", self,
+                                _("process-generate"), self,
                                 shortcut = 'F5',
-                                statusTip = "Generate a python flowgraph")
+                                statusTip = _("process-generate-tooltip"))
 
         actions['execute'] = QtWidgets.QAction(icons('media-playback-start'),
-                                "Execute", self,
+                                _("process-execute"), self,
                                 shortcut = 'F6',
-                                statusTip = "Execute a python flowgraph")
+                                statusTip = _("process-execute-tooltip"))
 
         actions['kill'] =   QtWidgets.QAction(icons('process-stop'),
-                                "Kill", self,
+                                _("process-kill"), self,
                                 shortcut = 'F7',
-                                statusTip = "Kill current flowgraph")
+                                statusTip = _("process-kill-tooltip"))
 
         actions['help'] = QtWidgets.QAction(icons('help-browser'),
-                                "Help", self,
+                                _("help"), self,
                                 shortcut = keys.HelpContents,
-                                statusTip = "Show help")
+                                statusTip = _("help-tooltip"))
 
         actions['types'] = QtWidgets.QAction("Types", self)
 
         actions['library'] = QtWidgets.QAction("Library", self,
                                 shortcut = "Ctrl+L",
-                                statusTip = "Show the block library")
+                                statusTip = _("block-library-tooltip"))
 
         actions['report'] = QtWidgets.QAction("Reports", self)
         actions['enable'] = QtWidgets.QAction("Enable", self)
         actions['disable'] = QtWidgets.QAction("Disable", self)
+
         actions['properties'] = QtWidgets.QAction(icons('document-properties'),
-                                "Properties", self,
+                                _("properties"), self,
                                 #shortcut = QtGui,
-                                statusTip = "Show properties for flowgraph")
+                                statusTip = _("flowgraph-properties-tooltip"))
 
         actions['preferences'] = QtWidgets.QAction(icons('preferences-system'),
-                                "Preferences", self,
+                                _("preferences"), self,
                                 #shortcut,
-                                statusTip = "Show GRC preferences")
+                                statusTip = _("preferences-tooltip"))
 
         # Disable some actions, by default
         actions['save'].setEnabled(False)
@@ -316,7 +317,7 @@ class MainView(QtWidgets.QMainWindow):
 
     def createStatusBar(self):
         logger.debug("Creating status bar")
-        self.statusBar().showMessage("Ready")
+        self.statusBar().showMessage(_("ready-message"))
 
     def init_other(self):
         logger.debug("Creating other")
@@ -355,22 +356,6 @@ class MainView(QtWidgets.QMainWindow):
     def open(self, flowgraph):
         self.setCentralWidget(flowgraph)
 
-    ### TODO: Move action list and translations out of view
+    ### TODO: Dynamic translation?
     def retranslateUi(self):
         logger.debug("Translating")
-        _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("self", "GNU Radio Companion"))
-        #self.editorTabs.setTabText(self.editorTabs.indexOf(self.tab_3), _translate("self", "Tab 1"))
-        #self.editorTabs.setTabText(self.editorTabs.indexOf(self.tab_4), _translate("self", "Tab 2"))
-        self.menuFile.setTitle(_translate("self", "File"))
-        self.menuEdit.setTitle(_translate("self", "Edit"))
-        self.menuView.setTitle(_translate("self", "View"))
-        self.menuBuild.setTitle(_translate("self", "Build"))
-        self.menuHelp.setTitle(_translate("self", "Help"))
-        self.fileToolbar.setWindowTitle(_translate("self", "File Toolbar"))
-        #self.reportDock.setWindowTitle(_translate("self", "Console"))
-        self.editToolbar.setWindowTitle(_translate("self", "Edit Toolbar"))
-        self.runToolbar.setWindowTitle(_translate("self", "Run Toolbar"))
-        #self.dockWidget.setWindowTitle(_translate("self", "Project"))
-        '''actions['New.setText(_translate("self", "New"))
-        actions['New.setToolTip(_translate("self", "New Flowgraph"))'''
