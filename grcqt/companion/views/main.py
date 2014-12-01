@@ -193,7 +193,7 @@ class MainView(QtWidgets.QMainWindow):
         actions['disable'] = QtWidgets.QAction("Disable", self)
 
         actions['properties'] = QtWidgets.QAction(icons('document-properties'),
-                                _("properties"), self,
+                                _("flowgraph-properties"), self,
                                 #shortcut = QtGui,
                                 statusTip = _("flowgraph-properties-tooltip"))
 

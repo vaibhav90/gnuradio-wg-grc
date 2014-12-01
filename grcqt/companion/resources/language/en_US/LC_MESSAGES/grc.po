@@ -26,7 +26,7 @@ msgstr "&New"
 
 #: companion/views/main.py:66
 msgid "new-tooltip"
-msgstr "Create a new flowgraph"
+msgstr "Create a new flow graph"
 
 #: companion/views/main.py:69
 msgid "open"
@@ -217,7 +217,7 @@ msgid "block-library-tooltip"
 msgstr "Show the block library "
 
 #: companion/views/main.py:196
-msgid "properties"
+msgid "flowgraph-properties"
 msgstr "Properties"
 
 #: companion/views/main.py:198
