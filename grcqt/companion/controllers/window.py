@@ -1,34 +1,38 @@
 import sys, os
 import logging
-from PyQt5 import QtCore, QtGui, QtWidgets
 
 # GRC imports
-from . import views
-from . import controllers
-from . controllers import helpers
+from .. import views
+from .  import helpers
 
-# Note. Logger must have the correct naming convention to share
-# handlers
-logger = logging.getLogger("grc.main")
+logger = logging.getLogger("grc.controllers.mainwindow")
 
-class MainController(object):
-    def __init__(self, dir):
+'''
+GRC.Controllers.MainWindow
+---------------------------
+Controller for the MainWindow view
+'''
+class MainWindow(object):
+    def __init__(self, INSTALL_DIR):
+
+        logger.debug("__init__")
+
+        # Setup local path variables
+        RESOURCES_DIR = os.path.join(INSTALL_DIR, 'companion/resources')
 
         # Load the main view class and initialize QMainWindow
-        logger.debug("__init__")
-        self._window = views.MainView()
-        self._platform = None
+        self._view = views.MainWindow(RESOURCES_DIR)
 
         # Need to setup the slots for the QtAction
         logger.debug("Connecting signals")
-        self._view_actions = self._window.getActions()
+        self._view_actions = self._view.getActions()
         helpers.Qt.connectSlots(self, self._view_actions)
 
         logger.debug("Loading flowgraph model")
-        test_flowgraph = os.path.join(dir, 'companion/views/data/rx_logo.grc')
-        self.flowgraph = views.FlowGraph(self._window, test_flowgraph)
+        test_flowgraph = os.path.join(INSTALL_DIR, 'companion/views/data/rx_logo.grc')
+        self.flowgraph = views.FlowGraph(self._view, test_flowgraph)
         logger.debug("Adding flowgraph view")
-        self._window.open(self.flowgraph)
+        self._view.open(self.flowgraph)
 
         # Also load and initialize child controllers
         #report_view = views.ReportsView()
@@ -55,29 +59,17 @@ class MainController(object):
         #self.actionClose.triggered.connect(self.close_page)
         #self.editorTabs.tabCloseRequested.connect(self.close_page)
 
-        #self.reportDock.close()
 
-        #load preferences and show the main window
-        #Preferences.load(platform)
-        # ToDo: use QSettings?
-        #state = Preferences.main_window_state()
         # if state is not None: self.restoreState(state)
         #geometry = Preferences.main_window_geometry()
         # if geometry is not None: self.restoreGeometry(geometry)
 
-    def start(self):
+    def show(self):
         logger.debug("Showing main window")
-        self._window.show()
-
-    def set_icon(self, path):
-        logger.debug("Setting window icon (%s)" % path )
-        icon = QtGui.QIcon(path)
-        self._window.setWindowIcon(icon)
+        self._view.show()
 
 
-    ############################################################
-    # Pages: create and close
-    ############################################################
+    ### Action Handlers ######################################
 
     def new_clicked(self):
         logger.debug ('new file')

@@ -1,3 +1,4 @@
+from . window    import MainWindow
 from . blocktree import BlockTreeController
 from . reports   import ReportsController
 from . drawing   import DrawingController

@@ -3,11 +3,9 @@ import os, sys
 import locale, gettext
 import logging, logging.handlers
 
-from PyQt5 import QtCore, QtGui, QtWidgets
-sys.path.append(os.path.dirname(__file__))
-
 #from grcqt.companion import main
-from companion import main
+from companion import grc
+
 
 # Global constants
 APP_NAME = "grc"
@@ -21,6 +19,7 @@ LEVELS = {'--debug': logging.DEBUG,
           '--error': logging.ERROR,
           '--critical': logging.CRITICAL}
 
+sys.path.append(os.path.dirname(__file__))
 
 '''
 Script that launches the GNU Radio Companion application. This should handle
@@ -35,6 +34,8 @@ if __name__ == "__main__":
         level = LEVELS.get(level_name, logging.WARNING)
     else:
         level = logging.WARNING
+    # Note: All children loggers must have the correct naming convention to share handlers
+    #  i.e. 'grc.<module-name>'
     logger = logging.getLogger('grc')
 
     # Still catch everything
@@ -82,26 +83,17 @@ if __name__ == "__main__":
     language.install()
 
 
-    ### QT GUI ###
-    # Setup the main qt application and window
-    app = QtWidgets.QApplication(sys.argv)
+    ### Preferences ###
 
+
+    ### GNU Radio ###
     # Load gnuradio framework
     try:
         from gnuradio import gr
     except ImportError as e:
         logger.error('Unable to import GR framework')
 
-    # Get the icon path. Will be relative to this script so define it here.
-    ICON = os.path.join(RESOURCES_DIR, 'logo/gnuradio_logo_icon-square-150x150-white.png')
-    logger.debug("ICON - %s" % ICON)
-
     # Initialize the GUI
-    controller = main.MainController(INSTALL_DIR) # Temporary argument
-    #controller = main.MainController()
-    controller.set_icon(ICON)
-    controller.start()
-
-    # Launch the qt app
-    sys.exit(app.exec_())
-    #sys.exit(0)
+    controller = grc.AppController(sys.argv, INSTALL_DIR)
+    # Launch the app
+    sys.exit(controller.run())

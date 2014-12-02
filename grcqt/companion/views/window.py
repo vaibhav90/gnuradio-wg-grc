@@ -1,17 +1,20 @@
+import sys, os
 import logging
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-logger = logging.getLogger("grc.views.main")
+logger = logging.getLogger("grc.views.mainwindow")
 
 '''
+GRC.Views.MainWindow
+---------------------------
 Class that handles the main view definition for the main grc window
 '''
-class MainView(QtWidgets.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
 
     '''
     Initialize the main window and call wrappers to initialize subviews
     '''
-    def __init__(self):
+    def __init__(self, RESOURCES_DIR):
         super().__init__()
         logger.debug("__init__")
 
@@ -27,6 +30,13 @@ class MainView(QtWidgets.QMainWindow):
             QtWidgets.QMainWindow.AllowTabbedDocks | \
             QtWidgets.QMainWindow.AnimatedDocks)
 
+        # Setup the window icon
+        ICON = os.path.join(RESOURCES_DIR, 'logo/gnuradio_logo_icon-square-150x150-white.png')
+        logger.debug("Setting window icon (%s)" % ICON )
+        icon = QtGui.QIcon(ICON)
+        self.setWindowIcon(icon)
+
+        logger.debug("Setting window size")
         screen = QtWidgets.QDesktopWidget().availableGeometry()
         self.resize(screen.width() * 0.40, screen.height())
 
@@ -42,9 +52,6 @@ class MainView(QtWidgets.QMainWindow):
         self.createStatusBar()
         #self.init_other()
 
-        #self.translateUI(language)
-
-        #self.retranslateUi()
         #actions['Quit.triggered.connect(self.close)
         #actions['Report.triggered.connect(self.reportDock.show)
         #QtCore.QMetaObject.connectSlotsByName(self)
@@ -351,7 +358,6 @@ class MainView(QtWidgets.QMainWindow):
 
         #self.horizontalLayout_5.addWidget(self.editorTabs)
         #self.horizontalLayout.addLayout(self.horizontalLayout_5)
-
 
     def open(self, flowgraph):
         self.setCentralWidget(flowgraph)
