@@ -14,6 +14,7 @@ class Properties(object):
         self.path = self.Path(file) # Setup default path and file information
         self.system = self.System()
         self.window = self.Window()
+        self.colors = self.Colors()
 
     # Initialize constants
     def Constants(self):
@@ -121,6 +122,24 @@ class Properties(object):
 
             # canvas grid size
             self.CANVAS_GRID_SIZE = 8
+
+    class Colors(object):
+        def __init__(self):
+            from PyQt5 import QtGui
+            color = QtGui.QColor
+
+            self.HIGHLIGHT = color('#00FFFF')
+            self.BORDER = color('black')
+            self.MISSING_BLOCK_BACKGROUND = color('#FFF2F2')
+            self.MISSING_BLOCK_BORDER = color('red')
+            self.PARAM_ENTRY_TEXT = color('black')
+            self.ENTRYENUM_CUSTOM = color('#EEEEEE')
+            self.FLOWGRAPH_BACKGROUND = color('#FFF9FF')
+            self.BLOCK_ENABLED = color('#F1ECFF')
+            self.BLOCK_DISABLED = color('#CCCCCC')
+            self.CONNECTION_ENABLED = color('black')
+            self.CONNECTION_DISABLED = color('#999999')
+            self.CONNECTION_ERROR = color('red')
 
 # In case importing is a better method
 # properties = Properties() # Use for import method?
