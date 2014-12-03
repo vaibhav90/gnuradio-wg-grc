@@ -6,6 +6,7 @@ import logging, logging.handlers
 #from grcqt.companion import main
 from companion import grc
 from companion import properties
+from companion import helpers
 
 LEVELS = {'--debug': logging.DEBUG,
           '--info': logging.INFO,
@@ -39,12 +40,10 @@ if __name__ == "__main__":
     console.setLevel(level)
 
     # Add console formatting
-    #format ='%(asctime)s %(message)s'
-    format = '%(asctime)s - %(name)s {%(levelname)s}\t- %(message)s'
-    #date_format = '%m/%d/%Y %I:%M:%S %p'
-    date_format = '%m/%d/%Y %I:%M'
-    formatter = logging.Formatter(format, datefmt=date_format)
-    #formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    format = '[%(asctime)s - %(levelname)8s] --- %(message)s (%(filename)s:%(lineno)s)'
+    date_format = '%I:%M'
+    #formatter = logging.Formatter(format, datefmt = date_format)
+    formatter = helpers.log.ConsoleFormatter()
     console.setFormatter(formatter)
     logger.addHandler(console)
 
@@ -116,5 +115,5 @@ if __name__ == "__main__":
     # Initialize the GUI
     controller = grc.AppController(gp)
     # Launch the app
-    sys.exit(0)
-    #sys.exit(controller.run())
+    #sys.exit(0)
+    sys.exit(controller.run())
