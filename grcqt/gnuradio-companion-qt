@@ -1,17 +1,11 @@
 #!/usr/bin/env python3
-import os, sys
+import os, sys, platform
 import locale, gettext
 import logging, logging.handlers
 
 #from grcqt.companion import main
 from companion import grc
-
-
-# Global constants
-APP_NAME = "grc"
-INSTALL_DIR = os.path.abspath(os.path.dirname(__file__))
-RESOURCES_DIR = os.path.join(INSTALL_DIR, 'companion/resources')
-DEFAULT_LANGUAGE = ['en_US']
+from companion import properties
 
 LEVELS = {'--debug': logging.DEBUG,
           '--info': logging.INFO,
@@ -19,15 +13,14 @@ LEVELS = {'--debug': logging.DEBUG,
           '--error': logging.ERROR,
           '--critical': logging.CRITICAL}
 
-sys.path.append(os.path.dirname(__file__))
-
 '''
 Script that launches the GNU Radio Companion application. This should handle
 the logging, translation and main QT setup.
 '''
 if __name__ == "__main__":
 
-    ### Logging Support ###
+    ''' Logging Support '''
+    # Initialize logging first so that it can be used immediately
     # Get logging level (Default to WARNING)
     if len(sys.argv) > 1:
         level_name = sys.argv[1]
@@ -56,24 +49,20 @@ if __name__ == "__main__":
     logger.addHandler(console)
 
 
-    ### Path Information ###
-    logger.debug("APP_NAME - %s" % APP_NAME)
-    logger.debug("INSTALL_DIR - %s" % INSTALL_DIR)
-    logger.debug("RESOURCES_DIR - %s" % RESOURCES_DIR)
+    ''' Global Settings/Constants '''
+    gp = properties.Properties(sys.argv, __file__)
 
 
-    ### Translation Support ###
+    ''' Translation Support '''
     # Try to get the current locale. Always add English
     lc, encoding = locale.getdefaultlocale()
     if (lc):
         languages = [lc]
-    languages += DEFAULT_LANGUAGE
+    languages += gp.DEFAULT_LANGUAGE
     logger.debug("Using locale - %s" % str(languages))
 
     # Still run even if the english translation isn't found
-    LANGUAGE_DIR = os.path.join(RESOURCES_DIR, 'language')
-    logger.debug("LANGUAGE_DIR - %s" % LANGUAGE_DIR)
-    language = gettext.translation(APP_NAME, LANGUAGE_DIR, languages=languages, fallback=True)
+    language = gettext.translation(gp.APP_NAME, gp.path.LANGUAGE, languages=languages, fallback=True)
     if (type(language) == gettext.NullTranslations):
         logger.error("Unable to find any translation")
         logger.error("Default English translation missing")
@@ -83,10 +72,41 @@ if __name__ == "__main__":
     language.install()
 
 
-    ### Preferences ###
+    ''' SYSTEM PROPERTIES '''
+    # Figure out system specific properties and setup defaults.
+    # Some properties should be overriddable by preferences
+    # Get the current OS
+    if (platform.system() == "Linux"):
+        logger.debug("Detected Linux")
+        gp.system.OS = "Linux"
+        # Deteremine if Unity is running....
+        try:
+            #current_desktop = os.environ['DESKTOP_SESSION']
+            current_desktop = os.environ['XDG_CURRENT_DESKTOP']
+            logger.debug("Desktop Session - %s" % current_desktop)
+            if (current_desktop == "Unity"):
+                logger.debug("Detected GRC is running under unity")
+                # Use the native menubar rather than leaving it in the window
+                gp.window.NATIVE_MENUBAR = True
+        except:
+            logger.error("Unable to determine the Linux desktop system")
+
+    elif (platform.system() == "Darwin"):
+        logger.debug("Detected Mac OS X")
+        gp.system.OS = "OS X"
+        # Setup Mac specific QT elements
+        gp.window.NATIVE_MENUBAR = True
+    elif (platform.system() == "Windows"):
+        gp.system.OS = "Windows"
+        logger.warning("Detected Windows")
+    else:
+        logger.warning("Unknown operating system")
 
 
-    ### GNU Radio ###
+    ''' Preferences '''
+
+
+    ''' GNU Radio '''
     # Load gnuradio framework
     try:
         from gnuradio import gr
@@ -94,6 +114,7 @@ if __name__ == "__main__":
         logger.error('Unable to import GR framework')
 
     # Initialize the GUI
-    controller = grc.AppController(sys.argv, INSTALL_DIR)
+    controller = grc.AppController(gp)
     # Launch the app
-    sys.exit(controller.run())
+    sys.exit(0)
+    #sys.exit(controller.run())

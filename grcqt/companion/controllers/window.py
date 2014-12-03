@@ -13,15 +13,12 @@ GRC.Controllers.MainWindow
 Controller for the MainWindow view
 '''
 class MainWindow(object):
-    def __init__(self, INSTALL_DIR):
+    def __init__(self, gp):
 
         logger.debug("__init__")
 
-        # Setup local path variables
-        RESOURCES_DIR = os.path.join(INSTALL_DIR, 'companion/resources')
-
         # Load the main view class and initialize QMainWindow
-        self._view = views.MainWindow(RESOURCES_DIR)
+        self._view = views.MainWindow(gp)
 
         # Need to setup the slots for the QtAction
         logger.debug("Connecting signals")
@@ -29,7 +26,7 @@ class MainWindow(object):
         helpers.Qt.connectSlots(self, self._view_actions)
 
         logger.debug("Loading flowgraph model")
-        test_flowgraph = os.path.join(INSTALL_DIR, 'companion/views/data/rx_logo.grc')
+        test_flowgraph = os.path.join(gp.path.INSTALL, 'companion/views/data/rx_logo.grc')
         self.flowgraph = views.FlowGraph(self._view, test_flowgraph)
         logger.debug("Adding flowgraph view")
         self._view.open(self.flowgraph)

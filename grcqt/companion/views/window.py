@@ -14,7 +14,7 @@ class MainWindow(QtWidgets.QMainWindow):
     '''
     Initialize the main window and call wrappers to initialize subviews
     '''
-    def __init__(self, RESOURCES_DIR):
+    def __init__(self, gp):
         super().__init__()
         logger.debug("__init__")
 
@@ -31,14 +31,15 @@ class MainWindow(QtWidgets.QMainWindow):
             QtWidgets.QMainWindow.AnimatedDocks)
 
         # Setup the window icon
-        ICON = os.path.join(RESOURCES_DIR, 'logo/gnuradio_logo_icon-square-150x150-white.png')
-        logger.debug("Setting window icon (%s)" % ICON )
-        icon = QtGui.QIcon(ICON)
+        logger.debug("Setting window icon (%s)" % gp.path.ICON )
+        icon = QtGui.QIcon(gp.path.ICON)
         self.setWindowIcon(icon)
 
         logger.debug("Setting window size")
         screen = QtWidgets.QDesktopWidget().availableGeometry()
         self.resize(screen.width() * 0.40, screen.height())
+
+        self.menuBar().setNativeMenuBar(gp.window.NATIVE_MENUBAR)
 
         ### TODO: Not sure about document mode
         #self.setDocumentMode(True)
