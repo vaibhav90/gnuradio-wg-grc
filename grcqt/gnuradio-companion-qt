@@ -3,7 +3,6 @@ import os, sys, platform
 import locale, gettext
 import logging, logging.handlers
 
-#from grcqt.companion import main
 from companion import grc
 from companion import properties
 from companion import helpers
@@ -20,6 +19,11 @@ the logging, translation and main QT setup.
 '''
 if __name__ == "__main__":
 
+    ''' Global Settings/Constants '''
+    # Save the current path and arguements in the global properties
+    gp = properties.Properties(sys.argv, __file__)
+
+
     ''' Logging Support '''
     # Initialize logging first so that it can be used immediately
     # Get logging level (Default to WARNING)
@@ -30,10 +34,10 @@ if __name__ == "__main__":
         level = logging.WARNING
     # Note: All children loggers must have the correct naming convention to share handlers
     #  i.e. 'grc.<module-name>'
-    logger = logging.getLogger('grc')
+    log = logging.getLogger('grc')
 
     # Still catch everything
-    logger.setLevel(logging.DEBUG)
+    log.setLevel(logging.DEBUG)
 
     # Setup the console logging with the given level
     console = logging.StreamHandler()
@@ -43,13 +47,9 @@ if __name__ == "__main__":
     format = '[%(asctime)s - %(levelname)8s] --- %(message)s (%(filename)s:%(lineno)s)'
     date_format = '%I:%M'
     #formatter = logging.Formatter(format, datefmt = date_format)
-    formatter = helpers.log.ConsoleFormatter()
+    formatter = helpers.logging.ConsoleFormatter()
     console.setFormatter(formatter)
-    logger.addHandler(console)
-
-
-    ''' Global Settings/Constants '''
-    gp = properties.Properties(sys.argv, __file__)
+    log.addHandler(console)
 
 
     ''' Translation Support '''
@@ -58,15 +58,15 @@ if __name__ == "__main__":
     if (lc):
         languages = [lc]
     languages += gp.DEFAULT_LANGUAGE
-    logger.debug("Using locale - %s" % str(languages))
+    log.debug("Using locale - %s" % str(languages))
 
     # Still run even if the english translation isn't found
     language = gettext.translation(gp.APP_NAME, gp.path.LANGUAGE, languages=languages, fallback=True)
     if (type(language) == gettext.NullTranslations):
-        logger.error("Unable to find any translation")
-        logger.error("Default English translation missing")
+        log.error("Unable to find any translation")
+        log.error("Default English translation missing")
     else:
-        logger.info("Using translation - %s" % language.info()["language"])
+        log.info("Using translation - %s" % language.info()["language"])
     # Still need to install null translation to let the system handle calls to _()
     language.install()
 
@@ -76,30 +76,30 @@ if __name__ == "__main__":
     # Some properties should be overriddable by preferences
     # Get the current OS
     if (platform.system() == "Linux"):
-        logger.debug("Detected Linux")
+        log.debug("Detected Linux")
         gp.system.OS = "Linux"
         # Deteremine if Unity is running....
         try:
             #current_desktop = os.environ['DESKTOP_SESSION']
             current_desktop = os.environ['XDG_CURRENT_DESKTOP']
-            logger.debug("Desktop Session - %s" % current_desktop)
+            log.debug("Desktop Session - %s" % current_desktop)
             if (current_desktop == "Unity"):
-                logger.debug("Detected GRC is running under unity")
+                log.debug("Detected GRC is running under unity")
                 # Use the native menubar rather than leaving it in the window
                 gp.window.NATIVE_MENUBAR = True
         except:
-            logger.error("Unable to determine the Linux desktop system")
+            log.error("Unable to determine the Linux desktop system")
 
     elif (platform.system() == "Darwin"):
-        logger.debug("Detected Mac OS X")
+        log.debug("Detected Mac OS X")
         gp.system.OS = "OS X"
         # Setup Mac specific QT elements
         gp.window.NATIVE_MENUBAR = True
     elif (platform.system() == "Windows"):
+        log.warning("Detected Windows")
         gp.system.OS = "Windows"
-        logger.warning("Detected Windows")
     else:
-        logger.warning("Unknown operating system")
+        log.warning("Unknown operating system")
 
 
     ''' Preferences '''
@@ -110,7 +110,7 @@ if __name__ == "__main__":
     try:
         from gnuradio import gr
     except ImportError as e:
-        logger.error('Unable to import GR framework')
+        log.error('Unable to import GR framework')
 
     # Initialize the GUI
     controller = grc.AppController(gp)

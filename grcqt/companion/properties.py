@@ -1,5 +1,4 @@
-import os,  logging
-logger = logging.getLogger("grc.properties")
+import os
 
 '''
 Stores global system and preference properties for GRC.
@@ -18,45 +17,42 @@ class Properties(object):
         self.colors = self.Colors()
         self.types = self.Types(self.colors)
 
+
     # Initialize constants
     def Constants(self):
         self.APP_NAME = 'grc'
         self.DEFAULT_LANGUAGE = ['en_US']
-        logger.debug("APP_NAME - %s" % self.APP_NAME)
-        logger.debug("DEFAULT_LANGUAGE - %s" % self.DEFAULT_LANGUAGE)
 
 
     ''' Sub-category property classes '''
     # Initialize directories based on the path of the main script
     class Paths(object):
         def __init__(self, file):
-            ### GRC
+            ### GRC Specific Paths
             self.INSTALL = os.path.abspath(os.path.dirname(file))
             self.RESOURCES = os.path.join(self.INSTALL, 'companion/resources')
             self.LANGUAGE = os.path.join(self.INSTALL, 'companion/resources/language')
             self.LOGO = os.path.join(self.INSTALL, 'companion/resources/logo')
             self.ICON = os.path.join(self.LOGO, 'gnuradio_logo_icon-square-150x150-white.png')
             self.PREFERENCES = os.path.expanduser('~/.grc')
-            logger.debug("INSTALL - %s" % self.INSTALL)
-            logger.debug("RESOURCES - %s" % self.RESOURCES)
-            logger.debug("LANGUAGE - %s" % self.LANGUAGE)
-            logger.debug("LOGO - %s" % self.LOGO)
-            logger.debug("ICON - %s" % self.ICON)
+
+            # Model Paths
+            self.MODEL = os.path.join(self.INSTALL, 'model')
+            self.BLOCK_TREE_DTD = os.path.join(self.MODEL, 'block_tree.dtd')
+            self.FLOW_GRAPH_DTD = os.path.join(self.MODEL, 'flow_graph.dtd')
+            self.FLOW_GRAPH_TEMPLATE = os.path.join(self.MODEL, 'flow_graph.tmpl')
 
             ### Flow graph
             self.DEFAULT_FILE = os.getcwd()
             self.IMAGE_FILE_EXTENSION = '.png'
             self.TEXT_FILE_EXTENSION = '.txt'
             self.NEW_FLOGRAPH_TITLE = 'untitled'
-            logger.debug("DEFAULT_FILE - %s" % self.DEFAULT_FILE)
-            logger.debug("IMAGE_FILE_EXTENSION - %s" % self.IMAGE_FILE_EXTENSION)
-            logger.debug("TEXT_FILE_EXTENSION - %s" % self.TEXT_FILE_EXTENSION)
-            logger.debug("NEW_FLOGRAPH_TITLE - %s" % self.NEW_FLOGRAPH_TITLE)
 
 
     class System(object):
         def __init__(self):
-            self.OS = "Unknown"
+            self.OS = 'Unknown'
+
 
     class Window(object):
         def __init__(self):
@@ -83,10 +79,17 @@ class Properties(object):
             self.DEFAULT_BLOCKS_WINDOW_WIDTH = 100
             self.DEFAULT_REPORTS_WINDOW_WIDTH = 100
 
+            self.DEFAULT_PARAM_TAB = 'General'
+            self.ADVANCED_PARAM_TAB = 'Advanced'
+
+
     class FlowGraph(object):
         def __init__(self):
+            # File format
+            self.FILE_FORMAT_VERSION = 1
+
             # Fonts
-            self.FONT_FAMILY = "Sans"
+            self.FONT_FAMILY = 'Sans'
             self.FONT_SIZE = 8
             self.BLOCK_FONT = "%s %f" % (FONT_FAMILY, FONT_SIZE)
             self.PORT_FONT = BLOCK_FONT
@@ -125,6 +128,7 @@ class Properties(object):
 
             # canvas grid size
             self.CANVAS_GRID_SIZE = 8
+
 
     class Colors(object):
         def __init__(self):
@@ -182,7 +186,6 @@ class Properties(object):
             self.ID                         = '#DDDDDD'      # = color('#DDDDDD')
             self.WILDCARD                   = '#FFFFFF'      # = color('#FFFFFF')
             self.MSG                        = '#777777'      # = color('#777777')
-
 
 
     # Class is dependant on the color class.
