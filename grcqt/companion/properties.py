@@ -1,10 +1,8 @@
-import os
+import os, stat
 
-'''
-Stores global system and preference properties for GRC.
- - Setup default values during initialization
-'''
 class Properties(object):
+    ''' Stores global properties for GRC. '''
+
     APP_NAME = 'grc'
     DEFAULT_LANGUAGE = ['en_US']
 
@@ -12,26 +10,26 @@ class Properties(object):
         self.argv = argv
 
         # Setup sub-categories
-        self.path = Paths() # Setup default path and file information
+        self.path   = Paths()
         self.system = System()
         self.window = Window()
         self.colors = Colors()
-        self.types = Types()
+        self.types  = Types()
 
-# Initialize directories based on the path of the main script
 class Paths(object):
-    ### Flow graph
+    ''' Initialize GRC paths relative to current file. '''
+
+    # Flow graph
     DEFAULT_FILE = os.getcwd()
     IMAGE_FILE_EXTENSION = '.png'
     TEXT_FILE_EXTENSION = '.txt'
     NEW_FLOGRAPH_TITLE = 'untitled'
+    SEPARATORS = {'/':':', '\\':';'}[os.path.sep]
 
     # Setup all the install paths
     p = os.path
     PREFERENCES = p.expanduser('~/.grc')
     INSTALL = p.abspath(p.join(p.dirname(__file__), '..'))
-
-    print (INSTALL)
     RESOURCES = p.join(INSTALL, 'companion/resources')
     LANGUAGE = p.join(INSTALL, 'companion/resources/language')
     LOGO = p.join(INSTALL, 'companion/resources/logo')
@@ -42,11 +40,35 @@ class Paths(object):
     BLOCK_TREE_DTD = p.join(MODEL, 'block_tree.dtd')
     FLOW_GRAPH_DTD = p.join(MODEL, 'flow_graph.dtd')
     FLOW_GRAPH_TEMPLATE = p.join(MODEL, 'flow_graph.tmpl')
+    DEFAULT_FLOW_GRAPH = os.path.join(MODEL, 'default_flow_graph.grc')
+
+    #file creation modes
+    TOP_BLOCK_FILE_MODE = stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IWGRP | stat.S_IXGRP | stat.S_IROTH
+    HIER_BLOCK_FILE_MODE = stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IWGRP | stat.S_IROTH
+
+    #setup paths
+    '''
+    HIER_BLOCKS_LIB_DIR = os.environ.get('GRC_HIER_PATH',
+                                         os.path.expanduser('~/.grc_gnuradio'))
+    PREFS_FILE = os.environ.get('GRC_PREFS_PATH', os.path.join(os.path.expanduser('~/.grc')))
+    BLOCKS_DIRS = filter( #filter blank strings
+        lambda x: x, PATH_SEP.join([
+            os.environ.get('GRC_BLOCKS_PATH', ''),
+            _gr_prefs.get_string('grc', 'local_blocks_path', ''),
+            _gr_prefs.get_string('grc', 'global_blocks_path', ''),
+        ]).split(PATH_SEP),
+    ) + [HIER_BLOCKS_LIB_DIR]
+    '''
 
 class System(object):
+    ''' System specific properties '''
+
     OS = 'Unknown'
+    #XTERM_EXECUTABLE = _gr_prefs.get_string('grc', 'xterm_executable', 'xterm')
 
 class Window(object):
+    ''' Properties for the main window '''
+
     # Default window properties
     MIN_WINDOW_WIDTH = 600
     MIN_WINDOW_HEIGHT = 400
@@ -74,6 +96,8 @@ class Window(object):
     ADVANCED_PARAM_TAB = 'Advanced'
 
 class FlowGraph(object):
+    ''' Flow graph specific properites'''
+
     # File format
     FILE_FORMAT_VERSION = 1
 
@@ -119,6 +143,8 @@ class FlowGraph(object):
     CANVAS_GRID_SIZE = 8
 
 class Colors(object):
+    ''' Color definitions '''
+
     # Graphics stuff
     HIGHLIGHT                  = '#00FFFF'      # = color('#00FFFF')
     BORDER                     = 'black'        # = color('black')
@@ -168,8 +194,9 @@ class Colors(object):
     MSG                        = '#777777'      # = color('#777777')
 
 class Types(object):
-    # Setup types then map them to the conversion dictionaries
-    CORE_TYPES = {# key, size, color, name
+    ''' Setup types then map them to the conversion dictionaries '''
+
+    CORE_TYPES = { # Key: (Size, Color, Name)
          'fc64':    (16, Colors.COMPLEX_FLOAT_64,   'Complex Float 64'),
          'fc32':    (8,  Colors.COMPLEX_FLOAT_32,   'Complex Float 32'),
          'sc64':    (16, Colors.COMPLEX_INTEGER_64, 'Complex Integer 64'),
@@ -205,33 +232,3 @@ class Types(object):
     for key, (sizeof, color) in ALIAS_TYPES.items():
         TYPE_TO_COLOR[key]  = color
         TYPE_TO_SIZEOF[key] = size
-
-
-'''
-#setup paths
-PATH_SEP = {'/':':', '\\':';'}[os.path.sep]
-HIER_BLOCKS_LIB_DIR = os.environ.get('GRC_HIER_PATH',
-                                     os.path.expanduser('~/.grc_gnuradio'))
-PREFS_FILE = os.environ.get('GRC_PREFS_PATH',
-                            os.path.join(os.path.expanduser('~/.grc')))
-BLOCKS_DIRS = filter( #filter blank strings
-    lambda x: x, PATH_SEP.join([
-        os.environ.get('GRC_BLOCKS_PATH', ''),
-        _gr_prefs.get_string('grc', 'local_blocks_path', ''),
-        _gr_prefs.get_string('grc', 'global_blocks_path', ''),
-    ]).split(PATH_SEP),
-) + [HIER_BLOCKS_LIB_DIR]
-
-#user settings
-XTERM_EXECUTABLE = _gr_prefs.get_string('grc', 'xterm_executable', 'xterm')
-
-#file creation modes
-TOP_BLOCK_FILE_MODE = stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IWGRP | stat.S_IXGRP | stat.S_IROTH
-HIER_BLOCK_FILE_MODE = stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IWGRP | stat.S_IROTH
-
-#data files
-DATA_DIR = os.path.dirname(__file__)
-FLOW_GRAPH_TEMPLATE = os.path.join(DATA_DIR, 'flow_graph.tmpl')
-BLOCK_DTD = os.path.join(DATA_DIR, 'block.dtd')
-DEFAULT_FLOW_GRAPH = os.path.join(DATA_DIR, 'default_flow_graph.grc')
-'''
