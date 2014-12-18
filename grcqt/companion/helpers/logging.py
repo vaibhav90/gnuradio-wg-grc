@@ -11,13 +11,10 @@ class GRCHandler(logging.Handler): # Inherit from logging.Handler
         # run the regular Handler __init__
         logging.Handler.__init__(self)
         # Our custom argument
-        self.maxLength = maxLength  # Default to 256 log entries
-        self.log = []
+        self.log = collections.deque(maxlen = maxLength)
 
     def emit(self, record):
         self.log.append(record)
-        if len(self.log) > self.maxLength:
-            self.log.pop(0)    # List is too long. Remove the first item
 
     def getLogs(self, level):
         pass
