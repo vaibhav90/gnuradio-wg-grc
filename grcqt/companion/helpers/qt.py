@@ -23,7 +23,7 @@
 def connectSlots(self, actions, useToggled=True,
                  toggledHander="_toggled", triggeredHandler="_triggered"):
     for key in actions:
-        if (useToggled == True and actions[key].isCheckable()):
+        if useToggled == True and actions[key].isCheckable():
             # Try to use toggled rather than triggered
             try:
                 handler = key + toggledHander

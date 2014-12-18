@@ -16,7 +16,7 @@ class GRCHandler(logging.Handler): # Inherit from logging.Handler
 
     def emit(self, record):
         self.log.append(record)
-        if (len(self.log) > self.maxLength):
+        if len(self.log) > self.maxLength:
             self.log.pop(0)    # List is too long. Remove the first item
 
     def getLogs(self, level):
@@ -49,16 +49,15 @@ class ConsoleFormatter(logging.Formatter):
         import shutil
         size = shutil.get_terminal_size()
         self.width = size.columns
-        if (size.columns < 80):
+        if size.columns < 80:
             self.format = self.short
-        elif (size.columns >= 80 and size.columns < 120):
+        elif size.columns < 120:
             self.format = self.medium
-        elif (size.columns >= 120):
+        elif size.columns >= 120:
             self.format = self.long
-        else:
-            self.format = self.short
+
         # Check if verbose mode. If so override other options
-        if (verbose):
+        if verbose:
             self.format = self.verbose
 
     ''' Normal console formatters '''

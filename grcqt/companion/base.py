@@ -56,14 +56,13 @@ def init_view(logger_name=None):
          - Logging (self.log)
          - App Controller refereence (self.app)
          - Global properties
-         - Auto connecting slots
         '''
-        # Replacement init for the class
+        
         @functools.wraps(init_func)
         def replacement(self, controller, gp):
 
             # Setup the logger
-            if (logger_name):
+            if logger_name:
                 self.log = logging.getLogger(logger_name)
             else:
                 self.log = logging.getLogger("grc." + self.__class__.__name__)
