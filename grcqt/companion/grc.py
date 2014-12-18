@@ -4,11 +4,9 @@ from PyQt5 import QtWidgets
 # GRC imports
 from . import controllers
 
-'''
-Main controller for the whole application.
-Handles setting up all the child controllers and views and also global actions.
-'''
 class AppController(object):
+    """ Main controller everything; handles setting up child controllers, views, and global actions. """
+
     def __init__(self, gp):
         # Note. Logger must have the correct naming convention to share
         # handlers

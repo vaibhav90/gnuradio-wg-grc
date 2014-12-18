@@ -56,7 +56,7 @@ def init_view(logger_name=None):
          - App Controller refereence (self.app)
          - Global properties
         '''
-        
+
         @functools.wraps(init_func)
         def replacement(self, controller, gp):
 
@@ -74,38 +74,37 @@ def init_view(logger_name=None):
             self.controller = weakref.ref(controller)
             self.gp = gp
 
-            self.actions = {}
-
-            # Call the original init that should setup the view
-            #self.log.debug("__init__")
+            # Call the original init function
             init_func(self)
         return replacement
     return decorator
 
 
-'''
-GRC.Base.Controller
----------------------------
-Base class for all grc controllers and plugins.
-May need to convert these to class decorators?
- - Might help future development
-'''
+
 class Controller(object):
+    """
+    GRC.Base.Controller
+    ---------------------------
+    Base class for all grc controllers and plugins.
+    May need to convert these to class decorators?
+     - Might help future development
+    """
 
     def notImplemented(self):
         self.log.debug ('Not implemented')
 
-'''
-GRC.Base.View
----------------------------
-Base class for all grc view and plugins.
-May need to convert these to class decorators?
- - Might help future development
-'''
-class View(object):
 
-    def getActions(self):
-        return self.actions
+class View(object):
+    """
+    GRC.Base.View
+    ---------------------------
+    Base class for all grc view and plugins.
+    May need to convert these to class decorators?
+     - Might help future development
+    """
+
+    def __init__(self):
+        self.actions = {}
 
     def notImplemented(self):
         self.log.debug ('Not implemented')
