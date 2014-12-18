@@ -28,22 +28,22 @@ def connectSlots(self, actions, useToggled=True,
             try:
                 handler = key + toggledHander
                 actions[key].toggled.connect(getattr(self, handler))
-                self.log.debug("<%s.toggled> connected to handler <%s>" % (key, handler))
+                self.log.debug("<{0}.toggled> connected to handler <{1}>".format(key, handler))
                 # Successful connection. Jump to the next action.
                 continue
             except:
                 # Default to the triggered handler
-                self.log.warning("Could not connect <%s.toggled> to handler <%s>" % (key, handler))
+                self.log.warning("Could not connect <{0}.toggled> to handler <{1}>".format(key, handler))
 
         # Try and bind the 'triggered' signal to a handler.
         try:
             handler = key + triggeredHandler
             actions[key].triggered.connect(getattr(self, handler))
-            self.log.debug("<%s.triggered> connected to handler <%s>" % (key, handler))
+            self.log.debug("<{0}.triggered> connected to handler <{1}>".format(key, handler))
         except:
             try:
-                self.log.warning("Handler not implemented for <%s.triggered> in %s" % (key, type(self).__name__))
+                self.log.warning("Handler not implemented for <{0}.triggered> in {1}".format(key, type(self).__name__))
                 actions[key].triggered.connect(getattr(self, 'notImplemented'))
             except:
                 # This should never happen because 'notImplemented' is defined in base.Controller
-                self.log.error("Class cannot handle <%s.triggered>" % key)
+                self.log.error("Class cannot handle <{0}.triggered>".format(key))

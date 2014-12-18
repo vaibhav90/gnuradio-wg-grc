@@ -35,7 +35,7 @@ class MainWindow(base.Controller):
         filename = self.view.open()
 
         if filename:
-            self.log.info("Opening flowgraph (%s) " % filename )
+            self.log.info("Opening flowgraph ({0})".format(filename))
             self.flowgraph = views.FlowGraph(self.view, filename)
             self.view.new_tab(self.flowgraph)
 

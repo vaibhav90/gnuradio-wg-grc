@@ -17,8 +17,8 @@ class AppController(object):
         self.gp = gp
 
         # Load the main view class and initialize QMainWindow
-        self.log.debug("ARGV - %s" % gp.argv)
-        self.log.debug("INSTALL_DIR - %s" % gp.path.INSTALL)
+        self.log.debug("ARGV - {0}".format(gp.argv))
+        self.log.debug("INSTALL_DIR - {0}".format(gp.path.INSTALL))
 
         # Global signals
         self.signals = {}

@@ -1,12 +1,8 @@
 import logging
 
-# Library used for formatting console output
-
-'''
- Custom log handler for GRC. Handles storing logs in list that can be
-  viewed using the GRC debug window.
-'''
 class GRCHandler(logging.Handler): # Inherit from logging.Handler
+    """ Custom log handler for GRC. Stores log entries to be viewed using the GRC debug window. """
+
     def __init__(self, maxLength=256):
         # run the regular Handler __init__
         logging.Handler.__init__(self)
@@ -20,17 +16,18 @@ class GRCHandler(logging.Handler): # Inherit from logging.Handler
         pass
 
 
-'''
- Custom log formatter that nicely truncates the log message and log levels
-  - Verbose mode outputs: time, level, message, name, filename, and line number
-  - Normal mode output varies based on terminal size:
-        w < 80       - Level, Message (min length 40)
-        80 < w < 120 - Level, Message, File, Line (25)
-        120 < w      - Level, Message, Name, File, Line
-  - Color mode ouptuts the same variable sizes and uses the blessings module
-    to add color
-'''
 class ConsoleFormatter(logging.Formatter):
+    """
+     Custom log formatter that nicely truncates the log message and log levels
+      - Verbose mode outputs: time, level, message, name, filename, and line number
+      - Normal mode output varies based on terminal size:
+            w < 80       - Level, Message (min length 40)
+            80 < w < 120 - Level, Message, File, Line (25)
+            120 < w      - Level, Message, Name, File, Line
+      - Color mode ouptuts the same variable sizes and uses the blessings module
+        to add color
+    """
+
     def __init__(self, verbose=False):
         # Test for blessings formatter
         try:
@@ -45,40 +42,37 @@ class ConsoleFormatter(logging.Formatter):
         # Determine size and mode
         import shutil
         size = shutil.get_terminal_size()
-        self.width = size.columns
+        width = max(40, size.columns - 15)
         if size.columns < 80:
             self.format = self.short
+            self.width = width
         elif size.columns < 120:
             self.format = self.medium
+            self.width = width - 30
         elif size.columns >= 120:
             self.format = self.long
-
+            self.width = width - 45
         # Check if verbose mode. If so override other options
         if verbose:
             self.format = self.verbose
 
-    ''' Normal console formatters '''
+    ### Normal log formmatters ###
     def short(self, record):
-        message_width = max(40, self.width - 15) # Account for level width
-        message = self.formatMessage(record.msg, message_width)
+        message = self.formatMessage(record.msg, self.width)
         level = self.formatLevel(record.levelname)
-        return ('%s -- %s' % (level, message))
-
+        return "{0} -- {1}".format(level, message)
+        
     def medium(self, record):
-        # Show the file and line number (25)
-        message_width = self.width - 45
-        message = self.formatMessage(record.msg, message_width)
+        message = self.formatMessage(record.msg, self.width)
         level = self.formatLevel(record.levelname)
-        format = '%s -- %-' + str(message_width) + 's (%s:%s)'
-        return format % (level, message, record.filename, record.lineno)
+        output = '{0} -- {1:<' + str(self.width) + '} ({2}:{3})'
+        return output.format(level, message, record.filename, record.lineno)
 
     def long(self, record):
-        # Show the logger name
-        message_width = self.width - 60
-        message = self.formatMessage(record.msg, message_width)
+        message = self.formatMessage(record.msg, self.width)
         level = self.formatLevel(record.levelname)
-        format = '%s -- %-' + str(message_width) + 's %s (%s:%s)'
-        return format % (level, message, record.name, record.filename, record.lineno)
+        output = '{0} -- {1:<' + str(self.width) + '} {2} ({3}:{4})'
+        return output.format(level, message, record.name, record.filename, record.lineno)
 
     ''' Verbose formatter '''
     def verbose(self, record):
@@ -88,32 +82,34 @@ class ConsoleFormatter(logging.Formatter):
     # Nicely format the levelname
     def formatLevelColor(self, levelname):
         term = self.terminal
-        if(levelname == "DEBUG"):
-            return (term.blue + "[Debug]".ljust(10) + term.normal)
-        elif(levelname == "INFO"):
-            return (term.green + "[Info]".ljust(10) + term.normal)
-        elif(levelname == "WARNING"):
-            return (term.yellow + "[Warning]".ljust(10) + term.normal)
-        elif(levelname == "ERROR"):
-            return (term.red + term.bold + "[ERROR]".ljust(10) + term.normal)
-        elif(levelname == "CRITICAL"):
-            return (term.red + term.bold + "[CRITICAL]".ljust(10) + term.normal)
+        output = "{0}{1}{2:<10}{3}"
+        if levelname == "DEBUG":
+            return output.format(term.blue, "", "[Debug]", term.normal)
+        elif levelname == "INFO":
+            return output.format(term.green, "", "[Info]", term.normal)
+        elif levelname == "WARNING":
+            return output.format(term.yellow, "", "[Warning]", term.normal)
+        elif levelname == "ERROR":
+            return output.format(term.red, term.bold, "[ERROR]", term.normal)
+        elif levelname == "CRITICAL":
+            return output.format(term.red, term.bold, "[CRITICAL]", term.normal)
         else:
-            return levelname
+            return output.format(term.blue, "", "[NOTSET]", term.normal)
 
     def formatLevelPlain(self, levelname):
+        output = "{0:<10}"
         if(levelname == "DEBUG"):
-            return "[Debug]".ljust(10)
+            return output.format("[Debug]")
         elif(levelname == "INFO"):
-            return "[Info]".ljust(10)
+            return output.format("[Info]")
         elif(levelname == "WARNING"):
-            return "[Warning]".ljust(10)
+            return output.format("[Warning]")
         elif(levelname == "ERROR"):
-            return "[ERROR]".ljust(10)
+            return output.format("[ERROR]")
         elif(levelname == "CRITICAL"):
-            return "[CRITICAL]".ljust(10)
+            return output.format("[CRITICAL]")
         else:
-            return levelname
+            return output.format("[NOTSET]")
 
     def formatMessage(self, message, width):
         if len(message) > width:

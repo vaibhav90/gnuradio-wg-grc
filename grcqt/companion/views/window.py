@@ -30,7 +30,7 @@ class MainWindow(QtWidgets.QMainWindow, base.View,):
             QtWidgets.QMainWindow.AnimatedDocks)
 
         # Setup the window icon
-        self.log.debug("Setting window icon (%s)" % self.gp.path.ICON )
+        self.log.debug("Setting window icon ({0})".format(self.gp.path.ICON ))
         icon = QtGui.QIcon(self.gp.path.ICON)
         self.setWindowIcon(icon)
 
@@ -64,23 +64,23 @@ class MainWindow(QtWidgets.QMainWindow, base.View,):
         self.log.debug("Creating actions")
         Action = QtWidgets.QAction
         Icons = QtGui.QIcon.fromTheme
-        keys = QtGui.QKeySequence
+        Keys = QtGui.QKeySequence
 
         actions = self.actions
         ### File Actions ###
         actions['new'] = Action(Icons("document-new"),
                                 _("new"), self,
-                                shortcut = keys.New,
+                                shortcut = Keys.New,
                                 statusTip = _("new-tooltip"))
 
         actions['open'] = Action(Icons("document-open"),
                                 _("open"), self,
-                                shortcut = keys.Open,
+                                shortcut = Keys.Open,
                                 statusTip = _("open-tooltip"))
 
         actions['close'] = Action(Icons("window-close"),
                                 _("close"), self,
-                                shortcut = keys.Close,
+                                shortcut = Keys.Close,
                                 statusTip = _("close-tooltip"))
 
         actions['close_all'] = Action(Icons("window-close"),
@@ -90,17 +90,17 @@ class MainWindow(QtWidgets.QMainWindow, base.View,):
 
         actions['save'] = Action(Icons("document-save"),
                                 _("save"), self,
-                                shortcut = keys.Save,
+                                shortcut = Keys.Save,
                                 statusTip = _("save-tooltip"))
 
         actions['save_as'] = Action(Icons("document-save-as"),
                                 _("save_as"), self,
-                                shortcut = keys.SaveAs,
+                                shortcut = Keys.SaveAs,
                                 statusTip = _("save_as-tooltip"))
 
         actions['print'] = Action(Icons('document-print'),
                                 _("print"), self,
-                                shortcut = keys.Print,
+                                shortcut = Keys.Print,
                                 statusTip = _("print-tooltip"))
 
         actions['screen_capture'] = Action(Icons('camera-photo'),
@@ -110,48 +110,48 @@ class MainWindow(QtWidgets.QMainWindow, base.View,):
 
         actions['exit'] = Action(Icons("application-exit"),
                                 _("exit"), self,
-                                shortcut = keys.Quit,
+                                shortcut = Keys.Quit,
                                 statusTip = _("exit-tooltip"))
 
         ### Edit Actions ###
         actions['undo'] = Action(Icons('edit-undo'),
                                 _("undo"), self,
-                                shortcut = keys.Undo,
+                                shortcut = Keys.Undo,
                                 statusTip = _("undo-tooltip"))
 
         actions['redo'] = Action(Icons('edit-redo'),
                                 _("redo"), self,
-                                shortcut = keys.Redo,
+                                shortcut = Keys.Redo,
                                 statusTip = _("redo-tooltip"))
 
         actions['cut'] = Action(Icons('edit-cut'),
                                 _("cut"), self,
-                                shortcut = keys.Cut,
+                                shortcut = Keys.Cut,
                                 statusTip = _("cut-tooltip"))
 
         actions['copy'] = Action(Icons('edit-copy'),
                                 _("copy"), self,
-                                shortcut = keys.Copy,
+                                shortcut = Keys.Copy,
                                 statusTip = _("copy-tooltip"))
 
         actions['paste'] = Action(Icons('edit-paste'),
                                 _("paste"), self,
-                                shortcut = keys.Paste,
+                                shortcut = Keys.Paste,
                                 statusTip = _("paste-tooltip"))
 
         actions['delete'] = Action(Icons('edit-delete'),
                                 _("delete"), self,
-                                shortcut = keys.Delete,
+                                shortcut = Keys.Delete,
                                 statusTip = _("delete-tooltip"))
 
         actions['rotate_ccw'] = Action(Icons('object-rotate-left'),
                                 _("rotate_ccw"), self,
-                                shortcut = keys.MoveToPreviousChar,
+                                shortcut = Keys.MoveToPreviousChar,
                                 statusTip = _("rotate_ccw-tooltip"))
 
         actions['rotate_cw'] = Action(Icons('object-rotate-right'),
                                 _("rotate_cw"), self,
-                                shortcut = keys.MoveToNextChar,
+                                shortcut = Keys.MoveToNextChar,
                                 statusTip = _("rotate_cw-tooltip"))
 
         ### View Actions ###
@@ -162,7 +162,7 @@ class MainWindow(QtWidgets.QMainWindow, base.View,):
 
         actions['find'] = Action(Icons('edit-find'),
                                 _("find"), self,
-                                shortcut = keys.Find,
+                                shortcut = Keys.Find,
                                 statusTip = _("find-tooltip"))
 
         ### Help Actions ###
@@ -191,7 +191,7 @@ class MainWindow(QtWidgets.QMainWindow, base.View,):
 
         actions['help'] = Action(Icons('help-browser'),
                                 _("help"), self,
-                                shortcut = keys.HelpContents,
+                                shortcut = Keys.HelpContents,
                                 statusTip = _("help-tooltip"))
 
         actions['types'] = Action("Types", self)

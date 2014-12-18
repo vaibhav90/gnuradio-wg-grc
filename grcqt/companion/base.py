@@ -26,7 +26,7 @@ def init_controller(view, logger_name=None):
                 self.log = logging.getLogger(logger_name)
             else:
                 self.log = logging.getLogger("grc." + self.__class__.__name__)
-                self.log.debug("Using default logger - %s" % ("grc." + self.__class__.__name__))
+                self.log.debug("Using default logger - {0}".format("grc." + self.__class__.__name__))
             self.log.debug("__init__")
 
             # Setup a reference to the AppController
@@ -65,7 +65,7 @@ def init_view(logger_name=None):
                 self.log = logging.getLogger(logger_name)
             else:
                 self.log = logging.getLogger("grc." + self.__class__.__name__)
-                self.log.debug("Using default logger - %s", ("grc." + self.__class__.__name__))
+                self.log.debug("Using default logger - {0}".format("grc." + self.__class__.__name__))
             self.log.debug("__init__")
 
             # Setup a reference to the AppController
