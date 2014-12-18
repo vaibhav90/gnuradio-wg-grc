@@ -16,7 +16,7 @@ class MainWindow(base.Controller):
         self.log.debug("__init__")
 
         self.log.debug("Loading flowgraph model")
-        test_flowgraph = os.path.join(self.gp.path.INSTALL, 'companion/views/data/rx_logo.grc')
+        test_flowgraph = os.path.join(self.gp.path.INSTALL, 'companion/resources/data/rx_logo.grc')
         self.flowgraph = views.FlowGraph(self.view, test_flowgraph)
         self.log.debug("Adding flowgraph view")
         self.view.new_tab(self.flowgraph)
