@@ -52,8 +52,8 @@ class MainWindow(base.View, QtWidgets.QMainWindow):
         self.createStatusBar()
         #self.init_other()
 
-        #my['Quit.triggered.connect(self.close)
-        #my['Report.triggered.connect(self.reportDock.show)
+        #actions['Quit.triggered.connect(self.close)
+        #actions['Report.triggered.connect(self.reportDock.show)
         #QtCore.QMetaObject.connectSlotsByName(self)
 
 
@@ -61,178 +61,178 @@ class MainWindow(base.View, QtWidgets.QMainWindow):
         """ Defines all actions for this view. Controller uses the QT to connect actions to handlers """
 
         self.log.debug("Creating actions")
-        actions = QtWidgets.QAction
-        icons = QtGui.QIcon.fromTheme
+        Action = QtWidgets.QAction
+        Icons = QtGui.QIcon.fromTheme
         keys = QtGui.QKeySequence
 
-        my = self.actions
+        actions = self.actions
         ### File Actions ###
-        my['new'] = actions(icons("document-new"),
+        actions['new'] = Action(Icons("document-new"),
                                 _("new"), self,
                                 shortcut = keys.New,
                                 statusTip = _("new-tooltip"))
 
-        my['open'] = actions(icons("document-open"),
+        actions['open'] = Action(Icons("document-open"),
                                 _("open"), self,
                                 shortcut = keys.Open,
                                 statusTip = _("open-tooltip"))
 
-        my['close'] = actions(icons("window-close"),
+        actions['close'] = Action(Icons("window-close"),
                                 _("close"), self,
                                 shortcut = keys.Close,
                                 statusTip = _("close-tooltip"))
 
-        my['close_all'] = actions(icons("window-close"),
+        actions['close_all'] = Action(Icons("window-close"),
                                 _("close_all"), self,
                                 #shortcut = QtGui.QKeySequence.Close,
                                 statusTip = _("close_all-tooltip"))
 
-        my['save'] = actions(icons("document-save"),
+        actions['save'] = Action(Icons("document-save"),
                                 _("save"), self,
                                 shortcut = keys.Save,
                                 statusTip = _("save-tooltip"))
 
-        my['save_as'] = actions(icons("document-save-as"),
+        actions['save_as'] = Action(Icons("document-save-as"),
                                 _("save_as"), self,
                                 shortcut = keys.SaveAs,
                                 statusTip = _("save_as-tooltip"))
 
-        my['print'] = actions(icons('document-print'),
+        actions['print'] = Action(Icons('document-print'),
                                 _("print"), self,
                                 shortcut = keys.Print,
                                 statusTip = _("print-tooltip"))
 
-        my['screen_capture'] = actions(icons('camera-photo'),
+        actions['screen_capture'] = Action(Icons('camera-photo'),
                                 _("screen_capture"), self,
                                 #shortcut = Qt,
                                 statusTip = _("screen_capture-tooltip"))
 
-        my['exit'] = actions(icons("application-exit"),
+        actions['exit'] = Action(Icons("application-exit"),
                                 _("exit"), self,
                                 shortcut = keys.Quit,
                                 statusTip = _("exit-tooltip"))
 
         ### Edit Actions ###
-        my['undo'] = actions(icons('edit-undo'),
+        actions['undo'] = Action(Icons('edit-undo'),
                                 _("undo"), self,
                                 shortcut = keys.Undo,
                                 statusTip = _("undo-tooltip"))
 
-        my['redo'] = actions(icons('edit-redo'),
+        actions['redo'] = Action(Icons('edit-redo'),
                                 _("redo"), self,
                                 shortcut = keys.Redo,
                                 statusTip = _("redo-tooltip"))
 
-        my['cut'] = actions(icons('edit-cut'),
+        actions['cut'] = Action(Icons('edit-cut'),
                                 _("cut"), self,
                                 shortcut = keys.Cut,
                                 statusTip = _("cut-tooltip"))
 
-        my['copy'] = actions(icons('edit-copy'),
+        actions['copy'] = Action(Icons('edit-copy'),
                                 _("copy"), self,
                                 shortcut = keys.Copy,
                                 statusTip = _("copy-tooltip"))
 
-        my['paste'] = actions(icons('edit-paste'),
+        actions['paste'] = Action(Icons('edit-paste'),
                                 _("paste"), self,
                                 shortcut = keys.Paste,
                                 statusTip = _("paste-tooltip"))
 
-        my['delete'] = actions(icons('edit-delete'),
+        actions['delete'] = Action(Icons('edit-delete'),
                                 _("delete"), self,
                                 shortcut = keys.Delete,
                                 statusTip = _("delete-tooltip"))
 
-        my['rotate_ccw'] = actions(icons('object-rotate-left'),
+        actions['rotate_ccw'] = Action(Icons('object-rotate-left'),
                                 _("rotate_ccw"), self,
                                 shortcut = keys.MoveToPreviousChar,
                                 statusTip = _("rotate_ccw-tooltip"))
 
-        my['rotate_cw'] = actions(icons('object-rotate-right'),
+        actions['rotate_cw'] = Action(Icons('object-rotate-right'),
                                 _("rotate_cw"), self,
                                 shortcut = keys.MoveToNextChar,
                                 statusTip = _("rotate_cw-tooltip"))
 
         ### View Actions ###
-        my['errors'] = actions(icons('dialog-error'),
+        actions['errors'] = Action(Icons('dialog-error'),
                                 _("errors"), self,
                                 shortcut = 'E',
                                 statusTip = _("errors-tooltip"))
 
-        my['find'] = actions(icons('edit-find'),
+        actions['find'] = Action(Icons('edit-find'),
                                 _("find"), self,
                                 shortcut = keys.Find,
                                 statusTip = _("find-tooltip"))
 
         ### Help Actions ###
-        my['about'] = actions(icons('help-about'),
+        actions['about'] = Action(Icons('help-about'),
                                 _("about"), self,
                                 statusTip = _("about-tooltip"))
 
-        my['about_qt'] = actions(icons('help-about'),
+        actions['about_qt'] = Action(Icons('help-about'),
                                 _("about-qt"), self,
                                 statusTip = _("about-tooltip"))
 
-        my['generate'] = actions(icons('system-run'),
+        actions['generate'] = Action(Icons('system-run'),
                                 _("process-generate"), self,
                                 shortcut = 'F5',
                                 statusTip = _("process-generate-tooltip"))
 
-        my['execute'] = actions(icons('media-playback-start'),
+        actions['execute'] = Action(Icons('media-playback-start'),
                                 _("process-execute"), self,
                                 shortcut = 'F6',
                                 statusTip = _("process-execute-tooltip"))
 
-        my['kill'] =   actions(icons('process-stop'),
+        actions['kill'] =   actions(Icons('process-stop'),
                                 _("process-kill"), self,
                                 shortcut = 'F7',
                                 statusTip = _("process-kill-tooltip"))
 
-        my['help'] = actions(icons('help-browser'),
+        actions['help'] = Action(Icons('help-browser'),
                                 _("help"), self,
                                 shortcut = keys.HelpContents,
                                 statusTip = _("help-tooltip"))
 
-        my['types'] = actions("Types", self)
+        actions['types'] = Action("Types", self)
 
-        my['library'] = actions("Library", self,
+        actions['library'] = Action("Library", self,
                                 shortcut = "Ctrl+L",
                                 statusTip = _("block-library-tooltip"),
                                 checkable=True)
 
-        my['report'] = actions("Reports", self,
+        actions['report'] = Action("Reports", self,
                         checkable=True)
-        my['enable'] = actions("Enable", self)
-        my['disable'] = actions("Disable", self)
+        actions['enable'] = Action("Enable", self)
+        actions['disable'] = Action("Disable", self)
 
-        my['properties'] = actions(icons('document-properties'),
+        actions['properties'] = Action(Icons('document-properties'),
                                 _("flowgraph-properties"), self,
                                 #shortcut = QtGui,
                                 statusTip = _("flowgraph-properties-tooltip"))
 
-        my['preferences'] = actions(icons('preferences-system'),
+        actions['preferences'] = Action(Icons('preferences-system'),
                                 _("preferences"), self,
                                 #shortcut,
                                 statusTip = _("preferences-tooltip"))
 
         # Disable some actions, by default
-        my['save'].setEnabled(False)
-        my['undo'].setEnabled(False)
-        my['redo'].setEnabled(False)
-        my['cut'].setEnabled(False)
-        my['copy'].setEnabled(False)
-        my['paste'].setEnabled(False)
-        my['delete'].setEnabled(False)
-        my['rotate_ccw'].setEnabled(False)
-        my['rotate_cw'].setEnabled(False)
-        my['errors'].setEnabled(False)
+        actions['save'].setEnabled(False)
+        actions['undo'].setEnabled(False)
+        actions['redo'].setEnabled(False)
+        actions['cut'].setEnabled(False)
+        actions['copy'].setEnabled(False)
+        actions['paste'].setEnabled(False)
+        actions['delete'].setEnabled(False)
+        actions['rotate_ccw'].setEnabled(False)
+        actions['rotate_cw'].setEnabled(False)
+        actions['errors'].setEnabled(False)
 
 
     def createMenus(self):
         """ Setup the main menubar for the application """
 
         self.log.debug("Creating menus")
-        my = self.actions
+        actions = self.actions
         menus = self.menus
 
         # Global menu options
@@ -240,93 +240,93 @@ class MainWindow(base.View, QtWidgets.QMainWindow):
 
         # Setup the file menu
         file = self.menuBar().addMenu("&File")
-        file.addAction(my['new'])
-        file.addAction(my['open'])
-        file.addAction(my['close'])
-        file.addAction(my['close_all'])
+        file.addAction(actions['new'])
+        file.addAction(actions['open'])
+        file.addAction(actions['close'])
+        file.addAction(actions['close_all'])
         file.addSeparator();
-        file.addAction(my['save'])
-        file.addAction(my['save_as'])
+        file.addAction(actions['save'])
+        file.addAction(actions['save_as'])
         file.addSeparator();
-        file.addAction(my['screen_capture'])
-        file.addAction(my['print'])
+        file.addAction(actions['screen_capture'])
+        file.addAction(actions['print'])
         file.addSeparator();
-        file.addAction(my['exit'])
+        file.addAction(actions['exit'])
         menus['file'] = file
 
         # Setup the edit menu
         edit = self.menuBar().addMenu("&Edit")
-        edit.addAction(my['undo'])
-        edit.addAction(my['redo'])
+        edit.addAction(actions['undo'])
+        edit.addAction(actions['redo'])
         edit.addSeparator()
-        edit.addAction(my['cut'])
-        edit.addAction(my['copy'])
-        edit.addAction(my['paste'])
-        edit.addAction(my['delete'])
+        edit.addAction(actions['cut'])
+        edit.addAction(actions['copy'])
+        edit.addAction(actions['paste'])
+        edit.addAction(actions['delete'])
         edit.addSeparator()
-        edit.addAction(my['rotate_ccw'])
-        edit.addAction(my['rotate_cw'])
+        edit.addAction(actions['rotate_ccw'])
+        edit.addAction(actions['rotate_cw'])
         edit.addSeparator()
-        edit.addAction(my['enable'])
-        edit.addAction(my['disable'])
-        edit.addAction(my['properties'])
+        edit.addAction(actions['enable'])
+        edit.addAction(actions['disable'])
+        edit.addAction(actions['properties'])
         menus['edit'] = edit
 
         # Setup the view menu
         view = self.menuBar().addMenu("&View")
-        view.addAction(my['errors'])
-        view.addAction(my['find'])
+        view.addAction(actions['errors'])
+        view.addAction(actions['find'])
         view.addSeparator()
-        view.addAction(my['library'])
-        view.addAction(my['report'])
+        view.addAction(actions['library'])
+        view.addAction(actions['report'])
         menus['view'] = view
 
         # Setup the build menu
         build = self.menuBar().addMenu("&Build")
-        build.addAction(my['generate'])
-        build.addAction(my['execute'])
-        build.addAction(my['kill'])
+        build.addAction(actions['generate'])
+        build.addAction(actions['execute'])
+        build.addAction(actions['kill'])
         menus['build'] = build
 
         # Setup the help menu
         help = self.menuBar().addMenu("&Help")
-        help.addAction(my['help'])
-        help.addAction(my['types'])
+        help.addAction(actions['help'])
+        help.addAction(actions['types'])
         help.addSeparator()
-        help.addAction(my['about'])
-        help.addAction(my['about_qt'])
+        help.addAction(actions['about'])
+        help.addAction(actions['about_qt'])
         menus['help'] = help
 
     def createToolbars(self):
         self.log.debug("Creating toolbars")
         toolbars = self.toolbars
-        my = self.actions
+        actions = self.actions
 
         # Main toolbar
         file = self.addToolBar("file")
-        file.addAction(my['new'])
-        file.addAction(my['open'])
-        file.addAction(my['save'])
-        file.addAction(my['close'])
-        file.addAction(my['print'])
+        file.addAction(actions['new'])
+        file.addAction(actions['open'])
+        file.addAction(actions['save'])
+        file.addAction(actions['close'])
+        file.addAction(actions['print'])
         toolbars['file'] = file
 
         # Edit toolbar
         edit = self.addToolBar("edit")
-        edit.addAction(my['cut'])
-        edit.addAction(my['copy'])
-        edit.addAction(my['paste'])
-        edit.addAction(my['delete'])
+        edit.addAction(actions['cut'])
+        edit.addAction(actions['copy'])
+        edit.addAction(actions['paste'])
+        edit.addAction(actions['delete'])
         edit.addSeparator()
-        edit.addAction(my['rotate_ccw'])
-        edit.addAction(my['rotate_cw'])
+        edit.addAction(actions['rotate_ccw'])
+        edit.addAction(actions['rotate_cw'])
         toolbars['edit'] = edit
 
         # Run Toolbar
         run = self.addToolBar("run")
-        run.addAction(my['generate'])
-        run.addAction(my['execute'])
-        run.addAction(my['kill'])
+        run.addAction(actions['generate'])
+        run.addAction(actions['execute'])
+        run.addAction(actions['kill'])
         toolbars['run'] = run
 
     def createStatusBar(self):
@@ -371,7 +371,7 @@ class MainWindow(base.View, QtWidgets.QMainWindow):
 
     def open(self):
         filename, filtr = QtWidgets.QFileDialog.getOpenFileName(self,
-            self.my['open'].statusTip(),
+            self.actions['open'].statusTip(),
             filter='Flow Graph Files (*.grc);;All files (*.*)')
         return filename
 
