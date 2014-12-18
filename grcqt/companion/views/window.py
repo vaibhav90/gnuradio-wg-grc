@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from .. import base
 
-class MainWindow(base.View, QtWidgets.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow, base.View,):
     """
     GRC.Views.MainWindow
     ---------------------------
@@ -46,6 +46,7 @@ class MainWindow(base.View, QtWidgets.QMainWindow):
         ### TODO: Also need to pull from the saved preferences as what to show and where
 
         # Generate the rest of the window
+        self.actions = {}
         self.createActions()
         self.createMenus()
         self.createToolbars()
@@ -183,7 +184,7 @@ class MainWindow(base.View, QtWidgets.QMainWindow):
                                 shortcut = 'F6',
                                 statusTip = _("process-execute-tooltip"))
 
-        actions['kill'] =   actions(Icons('process-stop'),
+        actions['kill'] =   Action(Icons('process-stop'),
                                 _("process-kill"), self,
                                 shortcut = 'F7',
                                 statusTip = _("process-kill-tooltip"))
