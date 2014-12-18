@@ -3,12 +3,9 @@ import os
 # GRC imports
 from .. import views, base
 
-'''
-GRC.Controllers.MainWindow
----------------------------
-Controller for the MainWindow view
-'''
 class MainWindow(base.Controller):
+    """ GRC.Controllers.MainWindow - Controls main window view """
+
     # Required to initialize controller
     #@base.init_controller(views.MainWindow)
     @base.init_controller(views.MainWindow, "grc.controllers.mainwindow")

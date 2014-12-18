@@ -3,19 +3,18 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from .. import base
 
-'''
-GRC.Views.MainWindow
----------------------------
-Class that handles the main view definition for the main grc window
-'''
 class MainWindow(base.View, QtWidgets.QMainWindow):
+    """
+    GRC.Views.MainWindow
+    ---------------------------
+    Class that handles the main view definition for the main grc window
+    """
 
-    '''
-    Initialize the main window and call wrappers to initialize subviews
-    '''
     @base.init_view("grc.views.mainwindow")
     def __init__(self):
-        super().__init__() # For the QT Framework
+        """ Initialize the main window and call wrappers to initialize subviews """
+        super().__init__()
+
         self.log.debug("__init__")
 
         # Internal dictionaries for menus, toolbars, etc.
@@ -58,10 +57,9 @@ class MainWindow(base.View, QtWidgets.QMainWindow):
         #QtCore.QMetaObject.connectSlotsByName(self)
 
 
-    # Any action for the window is defined here. Controller must
-    # use getActions and setup signals and slots to its own handlers
-    # Need to have translation capability here
     def createActions(self):
+        """ Defines all actions for this view. Controller uses the QT to connect actions to handlers """
+
         self.log.debug("Creating actions")
         actions = QtWidgets.QAction
         icons = QtGui.QIcon.fromTheme
@@ -229,8 +227,10 @@ class MainWindow(base.View, QtWidgets.QMainWindow):
         my['rotate_cw'].setEnabled(False)
         my['errors'].setEnabled(False)
 
-    # Setup the main menubar for the application
+
     def createMenus(self):
+        """ Setup the main menubar for the application """
+
         self.log.debug("Creating menus")
         my = self.actions
         menus = self.menus

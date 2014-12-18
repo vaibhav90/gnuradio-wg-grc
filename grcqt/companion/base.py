@@ -38,13 +38,12 @@ def init_controller(view, logger_name=None):
             # Allocate the view (Should build actions and all)
             self.view = view(self, self.gp)
 
-            # Call the original init
-            init_func(self)
-
             # Dynamically build connection for the available signals
             self.log.debug("Connecting signals")
-            self.view_actions = self.view.getActions()
-            helpers.qt.connectSlots(self, self.view_actions)
+            helpers.qt.connectSlots(self, self.view.actions)
+
+            # Call the original init
+            init_func(self)
 
         return replacement
     return decorator

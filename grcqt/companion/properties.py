@@ -1,7 +1,7 @@
 import os, stat
 
 class Properties(object):
-    ''' Stores global properties for GRC. '''
+    """ Stores global properties for GRC. """
 
     APP_NAME = 'grc'
     DEFAULT_LANGUAGE = ['en_US']
@@ -17,7 +17,7 @@ class Properties(object):
         self.types  = Types()
 
 class Paths(object):
-    ''' Initialize GRC paths relative to current file. '''
+    """ Initialize GRC paths relative to current file. """
 
     # Flow graph
     DEFAULT_FILE = os.getcwd()
@@ -61,13 +61,13 @@ class Paths(object):
     '''
 
 class System(object):
-    ''' System specific properties '''
+    """ System specific properties """
 
     OS = 'Unknown'
     #XTERM_EXECUTABLE = _gr_prefs.get_string('grc', 'xterm_executable', 'xterm')
 
 class Window(object):
-    ''' Properties for the main window '''
+    """ Properties for the main window """
 
     # Default window properties
     MIN_WINDOW_WIDTH = 600
@@ -96,7 +96,7 @@ class Window(object):
     ADVANCED_PARAM_TAB = 'Advanced'
 
 class FlowGraph(object):
-    ''' Flow graph specific properites'''
+    """ Flow graph specific properites """
 
     # File format
     FILE_FORMAT_VERSION = 1
@@ -143,7 +143,7 @@ class FlowGraph(object):
     CANVAS_GRID_SIZE = 8
 
 class Colors(object):
-    ''' Color definitions '''
+    """ Color definitions """
 
     # Graphics stuff
     HIGHLIGHT                  = '#00FFFF'      # = color('#00FFFF')
@@ -194,7 +194,7 @@ class Colors(object):
     MSG                        = '#777777'      # = color('#777777')
 
 class Types(object):
-    ''' Setup types then map them to the conversion dictionaries '''
+    """ Setup types then map them to the conversion dictionaries """
 
     CORE_TYPES = { # Key: (Size, Color, Name)
          'fc64':    (16, Colors.COMPLEX_FLOAT_64,   'Complex Float 64'),
