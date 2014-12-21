@@ -20,10 +20,11 @@
 
 '''
 
+
 def connectSlots(self, actions, useToggled=True,
                  toggledHander="_toggled", triggeredHandler="_triggered"):
     for key in actions:
-        if useToggled == True and actions[key].isCheckable():
+        if useToggled and actions[key].isCheckable():
             # Try to use toggled rather than triggered
             try:
                 handler = key + toggledHander
@@ -33,7 +34,8 @@ def connectSlots(self, actions, useToggled=True,
                 continue
             except:
                 # Default to the triggered handler
-                self.log.warning("Could not connect <{0}.toggled> to handler <{1}>".format(key, handler))
+                self.log.warning("Could not connect <{0}.toggled> to handler <{1}>".format(key,
+                                 handler))
 
         # Try and bind the 'triggered' signal to a handler.
         try:
@@ -42,7 +44,8 @@ def connectSlots(self, actions, useToggled=True,
             self.log.debug("<{0}.triggered> connected to handler <{1}>".format(key, handler))
         except:
             try:
-                self.log.warning("Handler not implemented for <{0}.triggered> in {1}".format(key, type(self).__name__))
+                self.log.warning("Handler not implemented for <{0}.triggered> in {1}".format(key,
+                                 type(self).__name__))
                 actions[key].triggered.connect(getattr(self, 'notImplemented'))
             except:
                 # This should never happen because 'notImplemented' is defined in base.Controller

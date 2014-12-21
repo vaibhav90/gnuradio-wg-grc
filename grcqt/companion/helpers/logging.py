@@ -1,13 +1,14 @@
 import logging
 
-class GRCHandler(logging.Handler): # Inherit from logging.Handler
+
+class GRCHandler(logging.Handler):  # Inherit from logging.Handler
     """ Custom log handler for GRC. Stores log entries to be viewed using the GRC debug window. """
 
     def __init__(self, maxLength=256):
         # run the regular Handler __init__
         logging.Handler.__init__(self)
         # Our custom argument
-        self.log = collections.deque(maxlen = maxLength)
+        self.log = collections.deque(maxlen=maxLength)
 
     def emit(self, record):
         self.log.append(record)
@@ -56,12 +57,12 @@ class ConsoleFormatter(logging.Formatter):
         if verbose:
             self.format = self.verbose
 
-    ### Normal log formmatters ###
+    # Normal log formmatters
     def short(self, record):
         message = self.formatMessage(record.msg, self.width)
         level = self.formatLevel(record.levelname)
         return "{0} -- {1}".format(level, message)
-        
+
     def medium(self, record):
         message = self.formatMessage(record.msg, self.width)
         level = self.formatLevel(record.levelname)

@@ -4,8 +4,12 @@ from PyQt5 import QtWidgets
 # GRC imports
 from . import controllers
 
+
 class AppController(object):
-    """ Main controller everything; handles setting up child controllers, views, and global actions. """
+    """
+    Main controller everything;
+    handles setting up child controllers, views, and global actions.
+    """
 
     def __init__(self, gp):
         # Note. Logger must have the correct naming convention to share
@@ -29,7 +33,6 @@ class AppController(object):
         # Need to setup the slots for the QtAction
         self.log.debug("Creating MainWindow controller")
         self.mainwindow = controllers.MainWindow(self, gp)
-
 
     def run(self):
 

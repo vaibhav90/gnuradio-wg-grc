@@ -1,5 +1,7 @@
-import sys, os
-import logging, weakref
+import os
+import sys
+import logging
+import weakref
 import functools
 
 # GRC imports
@@ -8,6 +10,8 @@ from . import helpers
 # Init decorator that handles setting common parameters.
 # This method does not require the developer to handle passing multiple arguments
 #  from the controller class to the base class.
+
+
 def init_controller(view, logger_name=None):
     def decorator(init_func):
         '''
@@ -25,8 +29,9 @@ def init_controller(view, logger_name=None):
             if (logger_name):
                 self.log = logging.getLogger(logger_name)
             else:
-                self.log = logging.getLogger("grc." + self.__class__.__name__)
-                self.log.debug("Using default logger - {0}".format("grc." + self.__class__.__name__))
+                name = "grc." + self.__class__.__name__
+                self.log = logging.getLogger(name)
+                self.log.debug("Using default logger - {0}".format(name))
             self.log.debug("__init__")
 
             # Setup a reference to the AppController
@@ -48,6 +53,7 @@ def init_controller(view, logger_name=None):
         return replacement
     return decorator
 
+
 def init_view(logger_name=None):
     def decorator(init_func):
         '''
@@ -64,8 +70,9 @@ def init_view(logger_name=None):
             if logger_name:
                 self.log = logging.getLogger(logger_name)
             else:
-                self.log = logging.getLogger("grc." + self.__class__.__name__)
-                self.log.debug("Using default logger - {0}".format("grc." + self.__class__.__name__))
+                name = "grc." + self.__class__.__name__
+                self.log = logging.getLogger(name)
+                self.log.debug("Using default logger - {0}".format(name))
             self.log.debug("__init__")
 
             # Setup a reference to the AppController
@@ -80,7 +87,6 @@ def init_view(logger_name=None):
     return decorator
 
 
-
 class Controller(object):
     """
     GRC.Base.Controller
@@ -91,7 +97,7 @@ class Controller(object):
     """
 
     def notImplemented(self):
-        self.log.debug ('Not implemented')
+        self.log.debug('Not implemented')
 
 
 class View(object):
@@ -107,4 +113,4 @@ class View(object):
         self.actions = {}
 
     def notImplemented(self):
-        self.log.debug ('Not implemented')
+        self.log.debug('Not implemented')

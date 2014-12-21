@@ -3,11 +3,11 @@ import os
 # GRC imports
 from .. import views, base
 
+
 class MainWindow(base.Controller):
     """ GRC.Controllers.MainWindow - Controls main window view """
 
     # Required to initialize controller
-    #@base.init_controller(views.MainWindow)
     @base.init_controller(views.MainWindow, "grc.controllers.mainwindow")
     def __init__(self):
         # Do other initialization stuff. View should already be allocated and
@@ -25,13 +25,13 @@ class MainWindow(base.Controller):
         self.log.debug("Showing main window")
         self.view.show()
 
-    ### Action Handlers ######################################
+    # Action Handlers
 
     def new_triggered(self):
-        self.log.debug ('new file')
+        self.log.debug('new file')
 
     def open_triggered(self):
-        self.log.debug ('open')
+        self.log.debug('open')
         filename = self.view.open()
 
         if filename:
@@ -40,59 +40,59 @@ class MainWindow(base.Controller):
             self.view.new_tab(self.flowgraph)
 
     def save_triggered(self):
-        self.log.debug ('save')
+        self.log.debug('save')
 
     def save_as_triggered(self):
-        self.log.debug ('save')
+        self.log.debug('save')
 
     def close_triggered(self):
-        self.log.debug ('close')
+        self.log.debug('close')
 
     def close_all_triggered(self):
-        self.log.debug ('close')
+        self.log.debug('close')
 
     def print_triggered(self):
-        self.log.debug ('print')
+        self.log.debug('print')
 
     def screen_capture_triggered(self):
-        self.log.debug ('screen capture')
+        self.log.debug('screen capture')
 
     def undo_triggered(self):
-        self.log.debug ('undo')
+        self.log.debug('undo')
 
     def redo_triggered(self):
-        self.log.debug ('redo')
+        self.log.debug('redo')
 
     def cut_triggered(self):
-        self.log.debug ('cut')
+        self.log.debug('cut')
 
     def copy_triggered(self):
-        self.log.debug ('copy')
+        self.log.debug('copy')
 
     def paste_triggered(self):
-        self.log.debug ('paste')
+        self.log.debug('paste')
 
     def delete_triggered(self):
-        self.log.debug ('delete')
+        self.log.debug('delete')
 
     def rotate_ccw_triggered(self):
-        self.log.debug ('rotate_ccw')
+        self.log.debug('rotate_ccw')
 
     def rotate_cw_triggered(self):
-        self.log.debug ('rotate_cw')
+        self.log.debug('rotate_cw')
 
     def errors_triggered(self):
-        self.log.debug ('errors')
+        self.log.debug('errors')
 
     def find_triggered(self):
-        self.log.debug ('find block')
+        self.log.debug('find block')
 
     def about_triggered(self):
-        self.log.debug ('about')
+        self.log.debug('about')
         self.view.about()
 
     def about_qt_triggered(self):
-        self.log.debug ('about_qt')
+        self.log.debug('about_qt')
         self.view.aboutQt()
 
     def properties_triggered(self):
@@ -114,7 +114,7 @@ class MainWindow(base.Controller):
         self.log.debug('types')
         self.view.types()
 
-    '''def preferences_triggered(self):
+    def preferences_triggered(self):
         self.log.debug('preferences')
 
     def exit_triggered(self):
@@ -129,7 +129,7 @@ class MainWindow(base.Controller):
 
     def report_triggered(self):
         self.log.debug('report')
-    '''
+
     def library_triggered(self):
         self.log.debug('library_triggered')
 

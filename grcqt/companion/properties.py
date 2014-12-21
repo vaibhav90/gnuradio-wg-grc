@@ -1,4 +1,6 @@
-import os, stat
+import os
+import stat
+
 
 class Properties(object):
     """ Stores global properties for GRC. """
@@ -10,11 +12,12 @@ class Properties(object):
         self.argv = argv
 
         # Setup sub-categories
-        self.path   = Paths()
+        self.path = Paths()
         self.system = System()
         self.window = Window()
         self.colors = Colors()
-        self.types  = Types()
+        self.types = Types()
+
 
 class Paths(object):
     """ Initialize GRC paths relative to current file. """
@@ -24,7 +27,7 @@ class Paths(object):
     IMAGE_FILE_EXTENSION = '.png'
     TEXT_FILE_EXTENSION = '.txt'
     NEW_FLOGRAPH_TITLE = 'untitled'
-    SEPARATORS = {'/':':', '\\':';'}[os.path.sep]
+    SEPARATORS = {'/': ':', '\\': ';'}[os.path.sep]
 
     # Setup all the install paths
     p = os.path
@@ -42,11 +45,11 @@ class Paths(object):
     FLOW_GRAPH_TEMPLATE = p.join(MODEL, 'flow_graph.tmpl')
     DEFAULT_FLOW_GRAPH = os.path.join(MODEL, 'default_flow_graph.grc')
 
-    #file creation modes
-    TOP_BLOCK_FILE_MODE = stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR | stat.S_IRGRP | stat.S_IWGRP | stat.S_IXGRP | stat.S_IROTH
-    HIER_BLOCK_FILE_MODE = stat.S_IRUSR | stat.S_IWUSR | stat.S_IRGRP | stat.S_IWGRP | stat.S_IROTH
+    # File creation modes
+    HIER_BLOCK_FILE_MODE = stat.S_IRUSR | stat.S_IWUSR | stat.S_IWGRP | stat.S_IROTH | stat.S_IRGRP
+    TOP_BLOCK_FILE_MODE = HIER_BLOCK_FILE_MODE | stat.S_IXUSR | stat.S_IXGRP
 
-    #setup paths
+    # Setup paths
     '''
     HIER_BLOCKS_LIB_DIR = os.environ.get('GRC_HIER_PATH',
                                          os.path.expanduser('~/.grc_gnuradio'))
@@ -60,11 +63,13 @@ class Paths(object):
     ) + [HIER_BLOCKS_LIB_DIR]
     '''
 
+
 class System(object):
     """ System specific properties """
 
     OS = 'Unknown'
     #XTERM_EXECUTABLE = _gr_prefs.get_string('grc', 'xterm_executable', 'xterm')
+
 
 class Window(object):
     """ Properties for the main window """
@@ -94,6 +99,7 @@ class Window(object):
 
     DEFAULT_PARAM_TAB = 'General'
     ADVANCED_PARAM_TAB = 'Advanced'
+
 
 class FlowGraph(object):
     """ Flow graph specific properites """
@@ -142,93 +148,95 @@ class FlowGraph(object):
     # canvas grid size
     CANVAS_GRID_SIZE = 8
 
+
 class Colors(object):
     """ Color definitions """
 
     # Graphics stuff
-    HIGHLIGHT                  = '#00FFFF'      # = color('#00FFFF')
-    BORDER                     = 'black'        # = color('black')
-    MISSING_BLOCK_BACKGROUND   = '#FFF2F2'      # = color('#FFF2F2')
-    MISSING_BLOCK_BORDER       = 'red'          # = color('red')
-    PARAM_ENTRY_TEXT           = 'black'        # = color('black')
-    ENTRYENUM_CUSTOM           = '#EEEEEE'      # = color('#EEEEEE')
-    FLOWGRAPH_BACKGROUND       = '#FFF9FF'      # = color('#FFF9FF')
-    BLOCK_ENABLED              = '#F1ECFF'      # = color('#F1ECFF')
-    BLOCK_DISABLED             = '#CCCCCC'      # = color('#CCCCCC')
-    CONNECTION_ENABLED         = 'black'        # = color('black')
-    CONNECTION_DISABLED        = '#999999'      # = color('#999999')
-    CONNECTION_ERROR           = 'red'          # = color('red')
+    HIGHLIGHT = '#00FFFF'
+    BORDER = 'black'
+    MISSING_BLOCK_BACKGROUND = '#FFF2F2'
+    MISSING_BLOCK_BORDER = 'red'
+    PARAM_ENTRY_TEXT = 'black'
+    ENTRYENUM_CUSTOM = '#EEEEEE'
+    FLOWGRAPH_BACKGROUND = '#FFF9FF'
+    BLOCK_ENABLED = '#F1ECFF'
+    BLOCK_DISABLED = '#CCCCCC'
+    CONNECTION_ENABLED = 'black'
+    CONNECTION_DISABLED = '#999999'
+    CONNECTION_ERROR = 'red'
 
     # Alias Colors
-    COMPLEX                    = '#3399FF'      # = color('#3399FF')
-    FLOAT                      = '#FF8C69'      # = color('#FF8C69')
-    INT                        = '#00FF99'      # = color('#00FF99')
-    SHORT                      = '#FFFF66'      # = color('#FFFF66')
-    BYTE                       = '#FF66FF'      # = color('#FF66FF')
+    COMPLEX = '#3399FF'
+    FLOAT = '#FF8C69'
+    INT = '#00FF99'
+    SHORT = '#FFFF66'
+    BYTE = '#FF66FF'
 
     # Type Colors
-    COMPLEX_FLOAT_64           = '#CC8C69'      # = color('#CC8C69')
-    COMPLEX_FLOAT_32           = '#3399FF'      # = color('#3399FF')
-    COMPLEX_INTEGER_64         = '#66CC00'      # = color('#66CC00')
-    COMPLEX_INTEGER_32         = '#33cc66'      # = color('#33cc66')
-    COMPLEX_INTEGER_16         = '#cccc00'      # = color('#cccc00')
-    COMPLEX_INTEGER_8          = '#cc00cc'      # = color('#cc00cc')
-    FLOAT_64                   = '#66CCCC'      # = color('#66CCCC')
-    FLOAT_32                   = '#FF8C69'      # = color('#FF8C69')
-    INTEGER_64                 = '#99FF33'      # = color('#99FF33')
-    INTEGER_32                 = '#00FF99'      # = color('#00FF99')
-    INTEGER_16                 = '#FFFF66'      # = color('#FFFF66')
-    INTEGER_8                  = '#FF66FF'      # = color('#FF66FF')
-    MESSAGE_QUEUE              = '#777777'      # = color('#777777')
-    ASYNC_MESSAGE              = '#C0C0C0'      # = color('#C0C0C0')
-    BUS_CONNECTION             = '#FFFFFF'      # = color('#FFFFFF')
-    WILDCARD                   = '#FFFFFF'      # = color('#FFFFFF')
+    COMPLEX_FLOAT_64 = '#CC8C69'
+    COMPLEX_FLOAT_32 = '#3399FF'
+    COMPLEX_INTEGER_64 = '#66CC00'
+    COMPLEX_INTEGER_32 = '#33cc66'
+    COMPLEX_INTEGER_16 = '#cccc00'
+    COMPLEX_INTEGER_8 = '#cc00cc'
+    FLOAT_64 = '#66CCCC'
+    FLOAT_32 = '#FF8C69'
+    INTEGER_64 = '#99FF33'
+    INTEGER_32 = '#00FF99'
+    INTEGER_16 = '#FFFF66'
+    INTEGER_8 = '#FF66FF'
+    MESSAGE_QUEUE = '#777777'
+    ASYNC_MESSAGE = '#C0C0C0'
+    BUS_CONNECTION = '#FFFFFF'
+    WILDCARD = '#FFFFFF'
 
-    COMPLEX_VECTOR             = '#3399AA'      # = color('#3399AA')
-    FLOAT_VECTOR               = '#CC8C69'      # = color('#CC8C69')
-    INT_VECTOR                 = '#00CC99'      # = color('#00CC99')
-    SHORT_VECTOR               = '#CCCC33'      # = color('#CCCC33')
-    BYTE_VECTOR                = '#CC66CC'      # = color('#CC66CC')
-    ID                         = '#DDDDDD'      # = color('#DDDDDD')
-    WILDCARD                   = '#FFFFFF'      # = color('#FFFFFF')
-    MSG                        = '#777777'      # = color('#777777')
+    COMPLEX_VECTOR = '#3399AA'
+    FLOAT_VECTOR = '#CC8C69'
+    INT_VECTOR = '#00CC99'
+    SHORT_VECTOR = '#CCCC33'
+    BYTE_VECTOR = '#CC66CC'
+    ID = '#DDDDDD'
+    WILDCARD = '#FFFFFF'
+    MSG = '#777777'
+
 
 class Types(object):
     """ Setup types then map them to the conversion dictionaries """
 
-    CORE_TYPES = { # Key: (Size, Color, Name)
-         'fc64':    (16, Colors.COMPLEX_FLOAT_64,   'Complex Float 64'),
-         'fc32':    (8,  Colors.COMPLEX_FLOAT_32,   'Complex Float 32'),
-         'sc64':    (16, Colors.COMPLEX_INTEGER_64, 'Complex Integer 64'),
-         'sc32':    (8,  Colors.COMPLEX_INTEGER_32, 'Complex Integer 32'),
-         'sc16':    (4,  Colors.COMPLEX_INTEGER_16, 'Complex Integer 16'),
-         'sc8':     (2,  Colors.COMPLEX_INTEGER_8,  'Complex Integer 8',),
-         'f64':     (8,  Colors.FLOAT_64,           'Float 64'),
-         'f32':     (4,  Colors.FLOAT_32,           'Float 32'),
-         's64':     (8,  Colors.INTEGER_64,         'Integer 64'),
-         's32':     (4,  Colors.INTEGER_32,         'Integer 32'),
-         's16':     (2,  Colors.INTEGER_16,         'Integer 16'),
-         's8':      (1,  Colors.INTEGER_8,          'Integer 8'),
-         'msg':     (0,  Colors.MESSAGE_QUEUE,      'Message Queue'),
-         'message': (0,  Colors.ASYNC_MESSAGE,      'Async Message'),
-         'bus':     (0,  Colors.BUS_CONNECTION,     'Bus Connection'),
-         '':        (0,  Colors.WILDCARD,           'Wildcard')
+    CORE_TYPES = {  # Key: (Size, Color, Name)
+        'fc64':    (16, Colors.COMPLEX_FLOAT_64,   'Complex Float 64'),
+        'fc32':    (8,  Colors.COMPLEX_FLOAT_32,   'Complex Float 32'),
+        'sc64':    (16, Colors.COMPLEX_INTEGER_64, 'Complex Integer 64'),
+        'sc32':    (8,  Colors.COMPLEX_INTEGER_32, 'Complex Integer 32'),
+        'sc16':    (4,  Colors.COMPLEX_INTEGER_16, 'Complex Integer 16'),
+        'sc8':     (2,  Colors.COMPLEX_INTEGER_8,  'Complex Integer 8',),
+        'f64':     (8,  Colors.FLOAT_64,           'Float 64'),
+        'f32':     (4,  Colors.FLOAT_32,           'Float 32'),
+        's64':     (8,  Colors.INTEGER_64,         'Integer 64'),
+        's32':     (4,  Colors.INTEGER_32,         'Integer 32'),
+        's16':     (2,  Colors.INTEGER_16,         'Integer 16'),
+        's8':      (1,  Colors.INTEGER_8,          'Integer 8'),
+        'msg':     (0,  Colors.MESSAGE_QUEUE,      'Message Queue'),
+        'message': (0,  Colors.ASYNC_MESSAGE,      'Async Message'),
+        'bus':     (0,  Colors.BUS_CONNECTION,     'Bus Connection'),
+        '':        (0,  Colors.WILDCARD,           'Wildcard')
     }
 
     ALIAS_TYPES = {
-        'complex' : (8, Colors.COMPLEX),
-        'float'   : (4, Colors.FLOAT),
-        'int'     : (4, Colors.INT),
-        'short'   : (2, Colors.SHORT),
-        'byte'    : (1, Colors.BYTE),
+        'complex': (8, Colors.COMPLEX),
+        'float':   (4, Colors.FLOAT),
+        'int':     (4, Colors.INT),
+        'short':   (2, Colors.SHORT),
+        'byte':    (1, Colors.BYTE),
     }
 
     # Setup conversion dictionaries
     TYPE_TO_COLOR = {}
     TYPE_TO_SIZEOF = {}
     for key, (size, color, name) in CORE_TYPES.items():
-        TYPE_TO_COLOR[key]  = color
+        TYPE_TO_COLOR[key] = color
         TYPE_TO_SIZEOF[key] = size
     for key, (sizeof, color) in ALIAS_TYPES.items():
-        TYPE_TO_COLOR[key]  = color
+        TYPE_TO_COLOR[key] = color
         TYPE_TO_SIZEOF[key] = size
