@@ -1,8 +1,9 @@
 import logging
 from PyQt5 import QtWidgets
 
-# GRC imports
-from . import controllers
+# GRC Imports
+from . import base            # Base classes
+from . import controllers     # Internal controllers
 
 
 class AppController(object):
@@ -20,6 +21,10 @@ class AppController(object):
         # Save the global preferences
         self.gp = gp
 
+        # Setup the base classes
+        base.Controller.setAttributes(self, gp)
+        base.View.setAttributes(gp)
+
         # Load the main view class and initialize QMainWindow
         self.log.debug("ARGV - {0}".format(gp.argv))
         self.log.debug("INSTALL_DIR - {0}".format(gp.path.INSTALL))
@@ -32,7 +37,7 @@ class AppController(object):
 
         # Need to setup the slots for the QtAction
         self.log.debug("Creating MainWindow controller")
-        self.mainwindow = controllers.MainWindow(self, gp)
+        self.mainwindow = controllers.MainWindow()
 
     def run(self):
 

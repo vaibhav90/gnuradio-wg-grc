@@ -7,9 +7,11 @@ from .. import views, base
 class MainWindow(base.Controller):
     """ GRC.Controllers.MainWindow - Controls main window view """
 
-    # Required to initialize controller
-    @base.init_controller(views.MainWindow, "grc.controllers.mainwindow")
     def __init__(self):
+        # Required function calls
+        super().__init__()
+        self.setView(views.MainWindow)
+
         # Do other initialization stuff. View should already be allocated and
         # actions dynamically connected to class functions. Also, the self.log
         # functionality should be also allocated
@@ -26,7 +28,6 @@ class MainWindow(base.Controller):
         self.view.show()
 
     # Action Handlers
-
     def new_triggered(self):
         self.log.debug('new file')
 

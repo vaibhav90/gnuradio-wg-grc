@@ -1,116 +1,153 @@
-import os
-import sys
+import abc
 import logging
 import weakref
-import functools
 
 # GRC imports
 from . import helpers
 
-# Init decorator that handles setting common parameters.
-# This method does not require the developer to handle passing multiple arguments
-#  from the controller class to the base class.
-
-
-def init_controller(view, logger_name=None):
-    def decorator(init_func):
-        '''
-        Replacement __init__ for a Controller class:
-         - Logging (self.log)
-         - App Controller refereence (self.app)
-         - Global properties
-         - Auto connecting slots
-        '''
-        # Replacement init for the class
-        @functools.wraps(init_func)
-        def replacement(self, app, gp):
-
-            # Setup the logger
-            if (logger_name):
-                self.log = logging.getLogger(logger_name)
-            else:
-                name = "grc." + self.__class__.__name__
-                self.log = logging.getLogger(name)
-                self.log.debug("Using default logger - {0}".format(name))
-            self.log.debug("__init__")
-
-            # Setup a reference to the AppController
-            # Need to use a weak references due to circular references,
-            #  otherwise the python gc will not correctly recover objects
-            self.app = weakref.ref(app)
-            self.gp = gp
-
-            # Allocate the view (Should build actions and all)
-            self.view = view(self, self.gp)
-
-            # Dynamically build connection for the available signals
-            self.log.debug("Connecting signals")
-            helpers.qt.connectSlots(self, self.view.actions)
-
-            # Call the original init
-            init_func(self)
-
-        return replacement
-    return decorator
-
-
-def init_view(logger_name=None):
-    def decorator(init_func):
-        '''
-        Replacement __init__ for a View class:
-         - Logging (self.log)
-         - App Controller refereence (self.app)
-         - Global properties
-        '''
-
-        @functools.wraps(init_func)
-        def replacement(self, controller, gp):
-
-            # Setup the logger
-            if logger_name:
-                self.log = logging.getLogger(logger_name)
-            else:
-                name = "grc." + self.__class__.__name__
-                self.log = logging.getLogger(name)
-                self.log.debug("Using default logger - {0}".format(name))
-            self.log.debug("__init__")
-
-            # Setup a reference to the AppController
-            # Need to use a weak references due to circular references,
-            #  otherwise the python gc will not correctly recover objects
-            self.controller = weakref.ref(controller)
-            self.gp = gp
-
-            # Call the original init function
-            init_func(self)
-        return replacement
-    return decorator
-
 
 class Controller(object):
-    """
-    GRC.Base.Controller
-    ---------------------------
-    Base class for all grc controllers and plugins.
-    May need to convert these to class decorators?
-     - Might help future development
-    """
-
-    def notImplemented(self):
-        self.log.debug('Not implemented')
-
-
-class View(object):
-    """
-    GRC.Base.View
-    ---------------------------
-    Base class for all grc view and plugins.
-    May need to convert these to class decorators?
-     - Might help future development
-    """
+    """ Abstract base class for all grc controllers. """
+    __metaclass__ = abc.ABCMeta
 
     def __init__(self):
-        self.actions = {}
+        """
+        Initializes the controller base class.
+        Sets up a default logger that can be overridden by the child class.
+        """
+        name = "grc.controller.{0}".format(self.__class__.__name__.lower())
+        self.log = logging.getLogger(name)
+        self.log.debug("Using default logger - {0}".format(name))
+
+        self.view = None
+
+    @classmethod
+    def setAttributes(cls, app, gp):
+        """
+        Adds references for the app controller and global properties as
+        attributes of the base class so that they are automatically inherited
+        by the children.
+        """
+        # Need to use a weak references for the app controller due to circular references.
+        # Otherwise the python gc will not correctly recover objects
+        cls.app = weakref.ref(app)
+        cls.gp = gp
+
+    # Controller setup functions
+    def setView(self, view):
+        # Make sure the view is a subclass of the base view
+        # Allocate the view (Should build actions and all)
+        self.view = view()
+        self.view.setController(self)
+
+        # Dynamically build connection for the available signals
+        self.log.debug("Connecting signals")
+        self.connectSlots(self, self.view.actions)
+
+    # Base methods
+    def setLogger(self, loggerName):
+        """ Replaces the default logger """
+        del self.log    # Get rid of the original logger since it is being replaced
+        self.log = logging.getLogger(loggerName)
+        self.log.debug("Using custom logger - {0}".format(loggerName))
+
+    def connectSlots(self, useToggled=True, toggledHandler='_toggled',
+                     triggeredHandler="_triggered"):
+        '''
+         Handles connecting signals from given actions to handlers
+            self    - Calling class
+            actions - Dictionary of a QAction and unique key
+
+         Dynamically build the connections for the signals by finding the correct
+         function to handle an action. Default behavior is to connect checkable actions to
+         the 'toggled' signal and normal actions to the 'triggered' signal. If 'toggled' is
+         not avaliable or useToggled is set to False then try to connect it to triggered.
+         Both toggled and triggered are called for checkable items, so there is no need for
+         both to be connected.
+
+            void QAction::toggled ( bool checked ) [signal]
+            void QAction::triggered ( bool checked = false ) [signal]
+              - Checked is set for checkable actions
+
+         Essentially the same as QMetaObject::connectSlotsByName, except the actions
+          and slots can be separated into a view and controller class
+
+        '''
+        actions = self.view.actions
+        for key in actions:
+            if useToggled and actions[key].isCheckable():
+                # Try to use toggled rather than triggered
+                try:
+                    handler = key + toggledHander
+                    actions[key].toggled.connect(getattr(self, handler))
+                    self.log.debug("<{0}.toggled> connected to handler <{1}>".format(key, handler))
+                    # Successful connection. Jump to the next action.
+                    continue
+                except:
+                    # Default to the triggered handler
+                    self.log.warning("Could not connect <{0}.toggled> to handler <{1}>".format(key,
+                                     handler))
+
+            # Try and bind the 'triggered' signal to a handler.
+            try:
+                handler = key + triggeredHandler
+                actions[key].triggered.connect(getattr(self, handler))
+                self.log.debug("<{0}.triggered> connected to handler <{1}>".format(key, handler))
+            except:
+                try:
+                    self.log.warning("Handler not implemented for <{0}.triggered> in {1}".format(
+                                     key, type(self).__name__))
+                    actions[key].triggered.connect(getattr(self, 'notImplemented'))
+                except:
+                    # This should never happen
+                    self.log.error("Class cannot handle <{0}.triggered>".format(key))
 
     def notImplemented(self):
         self.log.debug('Not implemented')
+
+class View(object):
+    """ Abstract base class for all grc views. """
+    __metaclass__ = abc.ABCMeta
+
+    def __init__(self):
+        """
+        Initializes the view base class.
+        Sets up a default logger that can be overridden by a child and calls createActions
+        to initialize the view's actions.
+        """
+        name = "grc.view.{0}".format(self.__class__.__name__.lower())
+        self.log = logging.getLogger(name)
+        self.log.debug("Using default logger - {0}".format(name))
+
+        # Setup the view's actions.
+        # createActions() Must be implemented by child view
+        self.log.debug("Creating actions")
+        self.actions = {}
+        self.createActions(self.actions)
+
+    # Required methods
+    @abc.abstractmethod
+    def createActions(self, actions):
+        """ Add actions to the view. """
+        raise NotImplementedError()
+
+    # Class methods
+    @classmethod
+    def setAttributes(cls, gp):
+        """ Adds reference for the global properties as an attributes of the base class. """
+        # Cannot set 'self.controller' because each view has a different corresponding controller.
+        cls.gp = gp
+
+    # Base methods
+    def setLogger(self, loggerName):
+        """ Replaces the default logger. """
+        del self.log    # Get rid of the original logger since it is being replaced
+        self.log = logging.getLogger(loggerName)
+        self.log.debug("Using custom logger - {0}".format(loggerName))
+
+    def setController(self, controller):
+        """
+        Creates a weak reference to the owning controller.
+        Called by controller after the view has been initialized.
+        """
+        self.controller = weakref.ref(controller)

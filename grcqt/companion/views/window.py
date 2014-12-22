@@ -12,17 +12,9 @@ class MainWindow(QtWidgets.QMainWindow, base.View):
     Class that handles the main view definition for the main grc window
     """
 
-    @base.init_view("grc.views.mainwindow")
     def __init__(self):
-        """ Initialize the main window and call wrappers to initialize subviews """
-        super().__init__()
-
+        super().__init__()  # REQUIRED for both QMainWindow and base.View
         self.log.debug("__init__")
-
-        # Internal dictionaries for menus, toolbars, etc.
-        # - Actiona are in base class
-        self.menus = {}
-        self.toolbars = {}
 
         # Main window properties
         self.log.debug("Setting window properties")
@@ -46,7 +38,8 @@ class MainWindow(QtWidgets.QMainWindow, base.View):
         #self.setDocumentMode(True)
 
         # Generate the rest of the window
-        self.createActions()
+        self.menus = {}
+        self.toolbars = {}
         self.createMenus()
         self.createToolbars()
         self.createStatusBar()
@@ -55,17 +48,15 @@ class MainWindow(QtWidgets.QMainWindow, base.View):
         #actions['Report.triggered.connect(self.reportDock.show)
         #QtCore.QMetaObject.connectSlotsByName(self)
 
-    def createActions(self):
+    def createActions(self, actions):
         """
         Defines all actions for this view.
         Controller uses the QT to connect actions to handlers
         """
-
         self.log.debug("Creating actions")
         Action = QtWidgets.QAction
         Icons = QtGui.QIcon.fromTheme
         Keys = QtGui.QKeySequence
-        actions = self.actions
 
         # File Actions
         actions['new'] = Action(Icons("document-new"), _("new"), self,
@@ -287,7 +278,7 @@ class MainWindow(QtWidgets.QMainWindow, base.View):
 
     def open(self):
         Open = QtWidgets.QFileDialog.getOpenFileName
-        filename, filtr = Qpen(self, self.actions['open'].statusTip(),
+        filename, filtr = Open(self, self.actions['open'].statusTip(),
                                filter='Flow Graph Files (*.grc);;All files (*.*)')
         return filename
 
